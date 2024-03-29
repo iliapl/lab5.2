@@ -40,7 +40,6 @@ public class Reader {
             String toName = bufferedReader.readLine();
 
             Vehicle vehicle = new Vehicle(vehicleName, new Coordinates(coordinatesX, coordinatesY));
-            Inspector.validateVehicles(vehicle);
             return vehicle;
         } catch (Exception e) {
             throw new ReadElementException("Ошибка при чтении элемента. Проверьте правильность данных");
