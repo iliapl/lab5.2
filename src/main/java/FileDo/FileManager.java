@@ -21,5 +21,10 @@ public class FileManager {
         }
         return list;
     }
+    public List<StudyGroup> readElementsFromFile() throws FileNotFoundException {
+        StringBuilder inputArray = new StringBuilder();
+        for (String string : fileToStringList()) {
+            inputArray.append(string);
+        }
 
 }

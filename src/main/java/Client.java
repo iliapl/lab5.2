@@ -1,18 +1,26 @@
+import FileDo.EmployeeCollection;
+import FileDo.EmployeeComand;
+import FileDo.FileManager;
+import org.w3c.dom.Document;
+import toVehicle.Vehicle;
 import util.EnvDoing;
 import util.Reader;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
 
 public class Client {
     public static void main(String[] args){
 try{
     EnvDoing e = new EnvDoing();
     File file = new File(e.getPATHcollection());
-    BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+    Vehicle vehicle = null;
+    FileInputStream fin = new FileInputStream(file);
+    BufferedInputStream bufferedReader = new BufferedInputStream(fin);
     Reader reader = new Reader(bufferedReader);
+    FileManager fileManager =new FileManager(file);
+    EmployeeCollection employeeCollection = new EmployeeCollection(fileManager.);
+    EmployeeComand employeeComand = new EmployeeComand()
 } catch (FileNotFoundException e) {
     throw new RuntimeException(e);
 }
