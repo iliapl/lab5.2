@@ -12,11 +12,10 @@ import java.time.LocalDate;
 
 public class FileRead {
     int position = 0;
-    File file;
+
     BufferedInputStream bufferedReaderin;
-    public  FileRead(BufferedInputStream bufferedReader, File file) {
+    public  FileRead(BufferedInputStream bufferedReader) {
         this.bufferedReaderin = bufferedReader;
-        this.file = file;
     }
     Vehicle vehicle = null;
 

@@ -17,10 +17,10 @@ try{
     Vehicle vehicle = null;
     FileInputStream fin = new FileInputStream(file);
     BufferedInputStream bufferedReader = new BufferedInputStream(fin);
-    Reader reader = new Reader(bufferedReader);
+    FileReader reader = new FileReader(String.valueOf(bufferedReader));
     FileManager fileManager =new FileManager(file);
     EmployeeCollection employeeCollection = new EmployeeCollection(fileManager.);
-    EmployeeComand employeeComand = new EmployeeComand()
+    EmployeeComand employeeComand = new EmployeeComand();
 } catch (FileNotFoundException e) {
     throw new RuntimeException(e);
 }
