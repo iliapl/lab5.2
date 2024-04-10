@@ -37,6 +37,8 @@ public class FileRead {
     Vehicle vehicle = null;
 
     public Vehicle readVehiclefromFile() throws IOException {
+
+        if(bufferedReaderin.available() != 0) {
             long id = readId();
             String name = readName();
             Coordinates coordinates = readCoordinates();
@@ -46,14 +48,22 @@ public class FileRead {
             FuelType fueltype = readFuelType();
             bufferedReaderin.read();
             bufferedReaderin.read();
-        return new Vehicle(name, coordinates, power, vtype, fueltype);
+            return new Vehicle(name, coordinates, power, vtype, fueltype);
+        }
+        else{
+            return null;
+        }
+
     }
+
+
     /*
     далее будут числа от балды, потом возьмём реально скипнутые байты
     кста скипаем на байт +2
      */
 
     public long readId() throws IOException {
+        bufferedReaderin.skip(30);
         bufferedReaderin.skip(howScippLong());//+2 перейти на новую строчку
         //return Long.parseLong(String.valueOf(bufferedReaderin.read()));
         long readID = scannerforbuffer.nextLong();
