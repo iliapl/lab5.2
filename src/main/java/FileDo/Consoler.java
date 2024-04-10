@@ -1,15 +1,16 @@
 package FileDo;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.util.Scanner;
 
-public class Console {
+public class Consoler {
+    private Scanner scanner;
     private EmployeeComand employeeComand;
-    private BufferedReader bufferedReader;
 
-    public Console(EmployeeComand employeeComand, BufferedReader bufferedReader) {
+    public Consoler(EmployeeComand employeeComand, Scanner scanner) {
         this.employeeComand = employeeComand;
-        this.bufferedReader = bufferedReader;
+        this.scanner = scanner;
     }
 
     public void start() {
@@ -18,11 +19,7 @@ public class Console {
         boolean needExit = false;
         while (!needExit) {
             System.out.println("Введите комманду");
-            try {
-                inputLine = bufferedReader.readLine();
-            } catch (IOException e) {
-                break;
-            }
+                inputLine = scanner.nextLine();
             needExit = employeeComand.executeCommand(inputLine);
         }
     }

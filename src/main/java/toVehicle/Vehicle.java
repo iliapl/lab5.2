@@ -3,7 +3,8 @@ package toVehicle;
 import java.io.*;
 import java.util.*;
 import java.util.Objects;
-public class Vehicle {
+import java.io.Serializable;
+public class Vehicle implements Serializable{
     private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null

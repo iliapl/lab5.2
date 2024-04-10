@@ -36,6 +36,6 @@ public class FileManager {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         xmlMapper.writeValue(byteArrayOutputStream, file);
         assertEquals(XML, byteArrayOutputStream.toString());
-        return new ArrayList<>(Arrays.asList(vehicle));
+        return new ArrayList<>(Arrays.asList());
     }
 }

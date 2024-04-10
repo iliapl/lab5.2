@@ -1,8 +1,10 @@
 package FileDo;
 
 import toVehicle.Vehicle;
-import util.Reader;
+import util.FileRead;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,13 +13,13 @@ import java.util.NoSuchElementException;
 public class EmployeeComand {
     private final Set<String> scriptNames;
     private final EmployeeCollection employeeCollection;
-    private final Reader reader;
+    private final FileRead reader;
     private final FileManager fileManager;
     private final Method[] methods;
     private boolean isScriptExecuting;
     private String history[] = new String[7];
 
-    public EmployeeComand(FileManager fileManager, Reader reader, EmployeeCollection employeeCollection) {
+    public EmployeeComand(FileManager fileManager, FileRead reader, EmployeeCollection employeeCollection) {
         this.fileManager = fileManager;
         this.reader = reader;
         this.employeeCollection = employeeCollection;
@@ -56,19 +58,19 @@ public class EmployeeComand {
         }
     }
 
-    public void add() {
+    public void add() throws IOException {
         boolean success = employeeCollection.add(getVehicle());
         if (!success) {
             System.out.println("Ошибка при добавлении элемента. Возможно, такой элемент уже существует.");
         }
     }
 
-    public Vehicle getVehicle() {
+    public Vehicle getVehicle() throws IOException {
         if (isScriptExecuting) {
             System.out.println("Попытка чтения элемента из скрипта");
-            return reader.readVehicleFromScript();
+            return reader.readVehiclefromFile();
         }
-        return reader.readVehicleFromScript();
+        return reader.readVehiclefromFile();
     }
 
     public void updateID(String argument) {
@@ -82,6 +84,8 @@ public class EmployeeComand {
             }
         } catch (NumberFormatException e) {
             System.out.println("Ошибка при вводе целого числа.");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
