@@ -2,6 +2,7 @@ package FileDo;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import toVehicle.Vehicle;
+import util.FileRead;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,11 +15,20 @@ import static org.apache.commons.text.lookup.DefaultStringLookup.XML;
 
 public class FileManager {
     private File file;
+    private FileRead fileRead;
 
-    public FileManager(File file) {
+    public FileManager(File file, FileRead fileRead) {
         this.file = file;
+        this.fileRead =fileRead;
     }
-
+    public HashSet<Vehicle> saveVehicles() throws IOException {
+        HashSet<Vehicle> vehicles = new HashSet<>();
+        while (fileRead.canRead()){
+            vehicles.add(fileRead.readVehiclefromFile());
+        }
+        return vehicles;
+    }
+/*
     public HashSet<String> fileSave() throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
         HashSet<String> list = new HashSet<>();
@@ -38,4 +48,6 @@ public class FileManager {
         assertEquals(XML, byteArrayOutputStream.toString());
         return new ArrayList<>(Arrays.asList());
     }
+
+ */
 }

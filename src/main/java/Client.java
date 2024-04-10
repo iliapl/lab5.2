@@ -23,8 +23,8 @@ try{
     FileInputStream fin = new FileInputStream(file);
     BufferedInputStream bufferedReader = new BufferedInputStream(fin);
     FileRead reader = new FileRead(bufferedReader,scanner);
-    FileManager fileManager =new FileManager(file);
-    EmployeeCollection employeeCollection = new EmployeeCollection((HashSet<Vehicle>) fileManager.readElementsFromFile());
+    FileManager fileManager =new FileManager(file, reader);
+    EmployeeCollection employeeCollection = new EmployeeCollection(fileManager.saveVehicles());
     EmployeeComand employeeComand = new EmployeeComand(fileManager, reader, employeeCollection);
     Consoler console = new Consoler(employeeComand,scanner);
 } catch (FileNotFoundException e) {

@@ -19,11 +19,20 @@ import java.util.Scanner;
 
 public class FileRead {
     private Scanner scanner;
-    private int position = 0;
+    private Scanner scannerforbuffer;
+    private Scanner scannerhowscipp;
     BufferedInputStream bufferedReaderin;
     public  FileRead(BufferedInputStream bufferedReader, Scanner scanner) {
         this.bufferedReaderin = bufferedReader;
         this.scanner = scanner;
+        this.scannerforbuffer = new Scanner(bufferedReader);
+        this.scannerhowscipp = new Scanner(bufferedReader);
+        scannerforbuffer.useDelimiter("<");
+        scannerhowscipp.useDelimiter(">");
+    }
+    private long howScippLong(){
+        long i = Long.parseLong(scannerhowscipp.nextLine()) + 1;
+        return  i;
     }
     Vehicle vehicle = null;
 
@@ -45,47 +54,63 @@ public class FileRead {
      */
 
     public long readId() throws IOException {
-        position = position +10;
-        bufferedReaderin.skip(10);//+2 чтобы перейти на новую строчку
-        return Long.parseLong(String.valueOf(bufferedReaderin.read()));
+        bufferedReaderin.skip(howScippLong());//+2 перейти на новую строчку
+        //return Long.parseLong(String.valueOf(bufferedReaderin.read()));
+        long readID = scannerforbuffer.nextLong();
+        bufferedReaderin.skip(readID + howScippLong() + 2);
+        return readID;
     }
     public String readName() throws IOException {
-        position = position + 13;
-        bufferedReaderin.skip(position);
-        return String.valueOf(bufferedReaderin.read());
+        bufferedReaderin.skip(howScippLong());
+        String name = scannerforbuffer.nextLine();
+        bufferedReaderin.skip(Long.parseLong(name) + howScippLong() + 2);
+        return name;
     }
     public FuelType readFuelType() throws IOException {
-        position = position + 12;
-        bufferedReaderin.skip(position);
-        return FuelType.valueOf(String.valueOf(bufferedReaderin.read()));
+        bufferedReaderin.skip(howScippLong());
+        FuelType fuelType = FuelType.valueOf(scannerforbuffer.nextLine());
+        bufferedReaderin.skip(Long.parseLong(String.valueOf(fuelType)) + howScippLong() + 2);
+        return fuelType;
     }
     public double readeEnginePower() throws IOException {
-        position = position + 15;
-        bufferedReaderin.skip(position);
-        return Double.parseDouble(String.valueOf(bufferedReaderin.read()));
+        bufferedReaderin.skip(howScippLong());
+        double enginePower = scannerforbuffer.nextDouble();
+        bufferedReaderin.skip((long) enginePower + howScippLong() + 2);
+        return enginePower;
     }
     public VehicleType readVehicleType() throws IOException {
-        position = position + 12;
-        bufferedReaderin.skip(position);
-        return  VehicleType.valueOf(String.valueOf(bufferedReaderin.read()));
+        bufferedReaderin.skip(howScippLong());
+        VehicleType vehicleType = VehicleType.valueOf(scannerforbuffer.nextLine());
+        bufferedReaderin.skip(Long.parseLong(String.valueOf(vehicleType)) + howScippLong() + 2);
+        return  vehicleType;
     }
     public Coordinates readCoordinates() throws IOException {
-        position = position + 11;
-        bufferedReaderin.skip(position);
-        long x = Long.parseLong(String.valueOf(bufferedReaderin.read()));
-        position = position + 11;
-        bufferedReaderin.skip(position);
-        Float y = Float.parseFloat(String.valueOf(bufferedReaderin.read()));
+        bufferedReaderin.skip(howScippLong());
+        long x = scannerforbuffer.nextLong();
+        bufferedReaderin.skip(x + howScippLong() + 2);
+        bufferedReaderin.skip(howScippLong());
+        Float y = scannerforbuffer.nextFloat();
+        bufferedReaderin.skip(Long.parseLong(String.valueOf(y)) + howScippLong() + 2);
         return new Coordinates(x,y);
     }
     public java.time.LocalDate readTime() throws IOException {
-        position = position + 11;
-        bufferedReaderin.skip(position);
-        java.time.LocalDate time = LocalDate.ofEpochDay(bufferedReaderin.read());
+        bufferedReaderin.skip(howScippLong());
+        java.time.LocalDate time = LocalDate.ofEpochDay(scannerforbuffer.nextLong());
+        bufferedReaderin.skip(Long.parseLong(String.valueOf(time)) + howScippLong() + 2);
         return time;
     }
+    public boolean canRead() throws IOException {
+        bufferedReaderin.skip(howScippLong());
+        bufferedReaderin.read();
+        if(bufferedReaderin.available() != 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public Vehicle readVehicleFromConsole(){
-        return new Vehicle(readNamefromConsole(),);
+        return new Vehicle(readNamefromConsole(),readCordinatesFromConsole(), readEnginePowerFromConsole(), readVehicleTypeFromConsole(), readFuelTypeFromConsole() );
     }
     public String readNamefromConsole(){
         System.out.println("Введите имя");
@@ -162,5 +187,6 @@ public class FileRead {
             return types[inputnomber];
         }
     }
+
 
 }
