@@ -15,6 +15,7 @@ import java.util.Scanner;
 
 public class Client {
     public static void main(String[] args){
+        System.out.println("получилось?");
 try{
     Scanner scanner = new Scanner(System.in);
     EnvDoing e = new EnvDoing();
