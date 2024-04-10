@@ -21,7 +21,6 @@ try{
     Scanner scanner = new Scanner(System.in);
     EnvDoing e = new EnvDoing();
     File file = new File(e.getPATHcollection());
-    Vehicle vehicle = null;
     FileInputStream fin = new FileInputStream(file);
     BufferedInputStream bufferedReader = new BufferedInputStream(fin);
     FileRead reader = new FileRead(bufferedReader,scanner);
@@ -29,6 +28,7 @@ try{
     EmployeeCollection employeeCollection = new EmployeeCollection(fileManager.saveVehicles());
     EmployeeComand employeeComand = new EmployeeComand(fileManager, reader, employeeCollection);
     Consoler console = new Consoler(employeeComand,scanner);
+    console.start();
 } catch (FileNotFoundException e) {
     throw new RuntimeException(e);
 } catch (IOException e) {

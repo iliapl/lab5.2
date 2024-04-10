@@ -30,9 +30,8 @@ public class FileRead {
         scannerforbuffer.useDelimiter("<");
         scannerhowscipp.useDelimiter(">");
     }
-    private long howScippLong(){
-        long i = Long.parseLong(scannerhowscipp.nextLine()) + 1;
-        return  i;
+    private int howScippInt(){
+        return scannerhowscipp.nextLine().length() + 1;
     }
     Vehicle vehicle = null;
 
@@ -63,55 +62,55 @@ public class FileRead {
      */
 
     public long readId() throws IOException {
-        bufferedReaderin.skip(30);
-        bufferedReaderin.skip(howScippLong());//+2 перейти на новую строчку
+        bufferedReaderin.readNBytes(30);
+        bufferedReaderin.readNBytes(howScippInt());//+2 перейти на новую строчку
         //return Long.parseLong(String.valueOf(bufferedReaderin.read()));
         long readID = scannerforbuffer.nextLong();
-        bufferedReaderin.skip(readID + howScippLong() + 2);
+        bufferedReaderin.readNBytes(String.valueOf(readID).length() + howScippInt() + 2);
         return readID;
     }
     public String readName() throws IOException {
-        bufferedReaderin.skip(howScippLong());
+        bufferedReaderin.readNBytes(howScippInt());
         String name = scannerforbuffer.nextLine();
-        bufferedReaderin.skip(Long.parseLong(name) + howScippLong() + 2);
+        bufferedReaderin.readNBytes(name.length() + howScippInt() + 2);
         return name;
     }
     public FuelType readFuelType() throws IOException {
-        bufferedReaderin.skip(howScippLong());
+        bufferedReaderin.readNBytes(howScippInt());
         FuelType fuelType = FuelType.valueOf(scannerforbuffer.nextLine());
-        bufferedReaderin.skip(Long.parseLong(String.valueOf(fuelType)) + howScippLong() + 2);
+        bufferedReaderin.readNBytes(String.valueOf(fuelType).length() + howScippInt() + 2);
         return fuelType;
     }
     public double readeEnginePower() throws IOException {
-        bufferedReaderin.skip(howScippLong());
+        bufferedReaderin.readNBytes(howScippInt());
         double enginePower = scannerforbuffer.nextDouble();
-        bufferedReaderin.skip((long) enginePower + howScippLong() + 2);
+        bufferedReaderin.readNBytes( String.valueOf(enginePower).length() + howScippInt() + 2);
         return enginePower;
     }
     public VehicleType readVehicleType() throws IOException {
-        bufferedReaderin.skip(howScippLong());
+        bufferedReaderin.readNBytes(howScippInt());
         VehicleType vehicleType = VehicleType.valueOf(scannerforbuffer.nextLine());
-        bufferedReaderin.skip(Long.parseLong(String.valueOf(vehicleType)) + howScippLong() + 2);
+        bufferedReaderin.readNBytes(String.valueOf(vehicleType).length() + howScippInt() + 2);
         return  vehicleType;
     }
     public Coordinates readCoordinates() throws IOException {
-        bufferedReaderin.skip(howScippLong());
+        bufferedReaderin.readNBytes(howScippInt());
         long x = scannerforbuffer.nextLong();
-        bufferedReaderin.skip(x + howScippLong() + 2);
-        bufferedReaderin.skip(howScippLong());
+        bufferedReaderin.readNBytes( String.valueOf(x).length() + howScippInt() + 2);
+        bufferedReaderin.readNBytes(howScippInt());
         Float y = scannerforbuffer.nextFloat();
-        bufferedReaderin.skip(Long.parseLong(String.valueOf(y)) + howScippLong() + 2);
+        bufferedReaderin.readNBytes(String.valueOf(y).length() + howScippInt() + 2);
         return new Coordinates(x,y);
     }
     public java.time.LocalDate readTime() throws IOException {
-        bufferedReaderin.skip(howScippLong());
+        bufferedReaderin.readNBytes(howScippInt());
         java.time.LocalDate time = LocalDate.ofEpochDay(scannerforbuffer.nextLong());
-        bufferedReaderin.skip(Long.parseLong(String.valueOf(time)) + howScippLong() + 2);
+        bufferedReaderin.readNBytes(String.valueOf(time).length() + howScippInt() + 2);
         return time;
     }
     public boolean canRead() throws IOException {
-        bufferedReaderin.skip(howScippLong());
-        bufferedReaderin.read();
+        bufferedReaderin.readNBytes(howScippInt());
+        bufferedReaderin.readNBytes(22);
         if(bufferedReaderin.available() != 0){
             return true;
         }
