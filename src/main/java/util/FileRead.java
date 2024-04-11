@@ -9,10 +9,7 @@ import toVehicle.VehicleType;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class FileRead {
     private Scanner scanner;
@@ -27,7 +24,7 @@ public class FileRead {
         scannerforbuffer.useDelimiter("<");
         scannerhowscipp.useDelimiter(">");
     }
-    private String howScippInt() throws IOException {//фактическ парсю файл
+    public String parse() throws IOException {//фактическ парсю файл
         String string;
         char c;
         List<Character> charmass = new ArrayList<>();
@@ -40,34 +37,55 @@ public class FileRead {
         }
         StringBuilder builder = new StringBuilder(charmass.size());
         for (Character ch : charmass) {
-            builder.append(ch);
+            String string1 = String.valueOf(ch);
+            if(!string1.equals(" ")) {
+                builder.append(ch);
+            }
         }
         string = builder.toString();
         return string;
     }
     Vehicle vehicle = null;
 
-    public Vehicle readVehiclefromFile() throws IOException {
-
-        if(bufferedReaderin.available() != 0) {
-            System.out.println("файл найден и он не пуст");
-            long id = readId();
-            String name = readName();
-            Coordinates coordinates = readCoordinates();
-            java.time.LocalDate date = readTime();
-            double power = readeEnginePower();
-            VehicleType vtype = readVehicleType();
-            FuelType fueltype = readFuelType();
-            return new Vehicle(name, coordinates, power, vtype, fueltype);
+    public HashSet<Vehicle> readVehiclefromFile() throws IOException {
+        HashSet<Vehicle> vehicles = new HashSet<>();
+        String[] strings = deliteEnters();
+        int numVehicle = strings.length % 8;
+        int num = numVehicle;
+        for(int i = 1; i < num; i++){
+            if (strings[i * 8] == null) {
+                numVehicle = num - 1;
+            }
         }
-        else{
-            System.out.println("Файл не найден или он пуст");
-            return null;
+        for(int inter = 0;inter < numVehicle; inter++) {
+            long id = Long.parseLong(strings[0 + inter * 8]);
+            String name = strings[1 + inter * 8];
+            long x = Long.parseLong(strings[2 + inter *8]);
+            Float y = Float.valueOf(strings[3 + inter *8]);
+            Coordinates coordinates = new Coordinates(x, y);
+            java.time.LocalDate date = LocalDate.parse(strings[4+ inter *8]);
+            double power = Double.parseDouble(strings[5+ inter *8]);
+            VehicleType vtype = VehicleType.valueOf(strings[6+ inter *8]);
+            FuelType fueltype = FuelType.valueOf(strings[7+ inter *8]);
+            vehicles.add(new Vehicle(name, coordinates, power, vtype, fueltype));
         }
-
+        return  vehicles;
     }
-
-
+    public String[] deliteEnters() throws IOException {
+        String string = parse();
+        String[] strings = new String[string.length()];
+        int i = 0;
+        while (scanner.hasNextLine()){
+            String c;
+            c = scanner.nextLine();
+            if(!c.isEmpty()){
+                strings[i] = c;
+                i++;
+                System.out.println(c);
+            }
+        }
+        return strings;
+    }
     /*
     далее будут числа от балды, потом возьмём реально скипнутые байты
     кста скипаем на байт +2

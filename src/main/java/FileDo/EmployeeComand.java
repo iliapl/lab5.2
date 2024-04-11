@@ -65,15 +65,18 @@ public class EmployeeComand {
         }
     }
 
-    public Vehicle getVehicle() throws IOException {
+
+    public HashSet<Vehicle> getVehicle() throws IOException {
 
         if (isScriptExecuting) {
-            System.out.println("Попытка чтения элемента из скрипта");
+            System.out.println("Попытка чтения элементов из скрипта");
             return reader.readVehiclefromFile();
         }
         return reader.readVehiclefromFile();
 
     }
+
+
 
     public void updateID(String argument) {
         try {

@@ -22,12 +22,7 @@ public class FileManager {
     }
     public HashSet<Vehicle> saveVehicles() throws IOException {
 
-        HashSet<Vehicle> vehicles = new HashSet<>();
-        while (fileRead.canRead()){
-            vehicles.add(fileRead.readVehiclefromFile());
-        }
-        return vehicles;
-        
+        return fileRead.readVehiclefromFile();
     }
 /*
     public HashSet<String> fileSave() throws IOException {
