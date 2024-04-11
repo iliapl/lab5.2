@@ -18,13 +18,13 @@ public class Client {
         System.out.println("получилось?");
         System.out.println("педро-педро-педро");
 try{
-    Scanner scanner = new Scanner(System.in);
     EnvDoing e = new EnvDoing();
+    Scanner scanner = new Scanner(System.in);
     File file = new File(e.getPATHcollection());
     FileInputStream fin = new FileInputStream(file);
     BufferedInputStream bufferedReader = new BufferedInputStream(fin);
     FileRead reader = new FileRead(bufferedReader,scanner);
-    FileManager fileManager =new FileManager(file, reader);
+    FileManager fileManager =new FileManager(reader);
     EmployeeCollection employeeCollection = new EmployeeCollection(fileManager.saveVehicles());
     EmployeeComand employeeComand = new EmployeeComand(fileManager, reader, employeeCollection);
     Consoler console = new Consoler(employeeComand,scanner);

@@ -1,20 +1,17 @@
 package util;
 
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
 import toVehicle.Coordinates;
 import toVehicle.FuelType;
 import toVehicle.Vehicle;
 import toVehicle.VehicleType;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class FileRead {
@@ -30,14 +27,30 @@ public class FileRead {
         scannerforbuffer.useDelimiter("<");
         scannerhowscipp.useDelimiter(">");
     }
-    private int howScippInt(){
-        return scannerhowscipp.nextLine().length() + 1;
+    private String howScippInt() throws IOException {//фактическ парсю файл
+        String string;
+        char c;
+        List<Character> charmass = new ArrayList<>();
+        while (bufferedReaderin.available() > 0) {
+            if ((char) bufferedReaderin.read() == '>') {
+                while (bufferedReaderin.available() > 0 && (c = (char) bufferedReaderin.read()) != '<') {
+                    charmass.add(c);
+                }
+            }
+        }
+        StringBuilder builder = new StringBuilder(charmass.size());
+        for (Character ch : charmass) {
+            builder.append(ch);
+        }
+        string = builder.toString();
+        return string;
     }
     Vehicle vehicle = null;
 
     public Vehicle readVehiclefromFile() throws IOException {
 
         if(bufferedReaderin.available() != 0) {
+            System.out.println("файл найден и он не пуст");
             long id = readId();
             String name = readName();
             Coordinates coordinates = readCoordinates();
@@ -45,11 +58,10 @@ public class FileRead {
             double power = readeEnginePower();
             VehicleType vtype = readVehicleType();
             FuelType fueltype = readFuelType();
-            bufferedReaderin.read();
-            bufferedReaderin.read();
             return new Vehicle(name, coordinates, power, vtype, fueltype);
         }
         else{
+            System.out.println("Файл не найден или он пуст");
             return null;
         }
 
@@ -60,11 +72,13 @@ public class FileRead {
     далее будут числа от балды, потом возьмём реально скипнутые байты
     кста скипаем на байт +2
      */
-
+    /*
     public long readId() throws IOException {
-        bufferedReaderin.readNBytes(30);
-        bufferedReaderin.readNBytes(howScippInt());//+2 перейти на новую строчку
+        bufferedReaderin.readNBytes(howScippInt() + 1);
+        System.out.println(bufferedReaderin.read());
+        bufferedReaderin.readNBytes(howScippInt() + 2);//+2 перейти на новую строчку
         //return Long.parseLong(String.valueOf(bufferedReaderin.read()));
+        bufferedReaderin.readNBytes(howScippInt());
         long readID = scannerforbuffer.nextLong();
         bufferedReaderin.readNBytes(String.valueOf(readID).length() + howScippInt() + 2);
         return readID;
@@ -108,13 +122,14 @@ public class FileRead {
         bufferedReaderin.readNBytes(String.valueOf(time).length() + howScippInt() + 2);
         return time;
     }
+     */
     public boolean canRead() throws IOException {
-        bufferedReaderin.readNBytes(howScippInt());
-        bufferedReaderin.readNBytes(22);
         if(bufferedReaderin.available() != 0){
+            System.out.println("Файл может быть прочитан");
             return true;
         }
         else{
+            System.out.println("Файл не может быть прочитан, количество байтов в файле" + bufferedReaderin.available());
             return false;
         }
     }

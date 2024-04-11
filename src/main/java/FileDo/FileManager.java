@@ -14,12 +14,11 @@ import static junit.framework.Assert.assertEquals;
 import static org.apache.commons.text.lookup.DefaultStringLookup.XML;
 
 public class FileManager {
-    private File file;
-    private FileRead fileRead;
+    FileRead fileRead;
 
-    public FileManager(File file, FileRead fileRead) {
-        this.file = file;
-        this.fileRead =fileRead;
+    public FileManager( FileRead fileRead) {
+
+        this.fileRead = fileRead;
     }
     public HashSet<Vehicle> saveVehicles() throws IOException {
 
