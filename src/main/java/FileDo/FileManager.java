@@ -9,20 +9,29 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.io.PrintWriter;
 
 import static junit.framework.Assert.assertEquals;
 import static org.apache.commons.text.lookup.DefaultStringLookup.XML;
 
 public class FileManager {
     FileRead fileRead;
+    HashSet<Vehicle> vehicles;
 
     public FileManager( FileRead fileRead) {
 
         this.fileRead = fileRead;
     }
     public HashSet<Vehicle> saveVehicles() throws IOException {
+        vehicles = fileRead.readVehiclefromFile();
 
         return fileRead.readVehiclefromFile();
+    }
+    public void saveToXml() throws IOException {
+        XmlMapper xmlMapper = new XmlMapper();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        xmlMapper.writeValue(byteArrayOutputStream, vehicles);
+        assertEquals(XML, byteArrayOutputStream.toString());
     }
 /*
     public HashSet<String> fileSave() throws IOException {

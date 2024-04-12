@@ -69,6 +69,8 @@ public class FileRead {
             FuelType fueltype = FuelType.valueOf(strings[7+ inter *8]);
             vehicles.add(new Vehicle(name, coordinates, power, vtype, fueltype));
         }
+        bufferedReaderin.close();
+
         return  vehicles;
     }
     public String[] deliteEnters() throws IOException {
