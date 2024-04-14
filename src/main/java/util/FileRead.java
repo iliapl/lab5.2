@@ -1,29 +1,152 @@
 package util;
 
-import toVehicle.Coordinates;
-import toVehicle.FuelType;
-import toVehicle.Vehicle;
-import toVehicle.VehicleType;
+import FileDo.Filewas;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+import toVehicle.*;
 
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
 public class FileRead {
-    private Scanner scanner;
-    private Scanner scannerforbuffer;
-    private Scanner scannerhowscipp;
+    Document doc;
+    private Filewas filewas;
+    Scanner scanner;
     BufferedInputStream bufferedReaderin;
-    public  FileRead(BufferedInputStream bufferedReader, Scanner scanner) {
+    private File file;
+    HashSet<Vehicle> vehicles = new HashSet<>();
+    public  FileRead(BufferedInputStream bufferedReader,Scanner scanner, File file) {
         this.bufferedReaderin = bufferedReader;
+        this.file = file;
         this.scanner = scanner;
-        this.scannerforbuffer = new Scanner(bufferedReader);
-        this.scannerhowscipp = new Scanner(bufferedReader);
-        scannerforbuffer.useDelimiter("<");
-        scannerhowscipp.useDelimiter(">");
+        filewas = new Filewas();
     }
+    public Document buildDocument() throws SAXException, IOException ,ParserConfigurationException{
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            return docFactory.newDocumentBuilder().parse(bufferedReaderin);
+    }
+    public Node getFirstNode(){
+        try {
+            doc = buildDocument();
+            return doc.getFirstChild();
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            System.out.println("Ошибка парсинша");
+            return null;
+        }
+
+    }
+    public NodeList getNodes(){
+        return getFirstNode().getChildNodes();
+    }
+
+    public boolean canReadElements(){
+        if (filewas.canReadFile(file)) {
+            if (getFirstNode() != null){
+               return true;
+            }
+            else {
+                System.out.println("Файл не содержит элементов");
+                return false;
+            }
+        }
+        else{
+           return false;
+        }
+    }
+    public HashSet<Vehicle> parserXML() {
+        if(canReadElements()){
+            NodeList nodeList = getNodes();
+            for(int i = 0; i < getNodes().getLength(); i++){
+                if(getNodes().item(i).getNodeType() != Node.ELEMENT_NODE){
+                    continue;
+                }
+                if(getNodes().item(i).equals("vehicle")){
+                    continue;
+                }
+                NodeList elements = nodeList.item(i).getChildNodes();
+                for(int c = 0; c < elements.getLength(); c++){
+
+                    if (elements.item(c).getNodeType() != Node.ELEMENT_NODE){
+                        continue;
+                    }
+                    long id = 0;
+                    String name = null;
+                    Coordinates coordinates = null;
+                    java.time.LocalDate creationDate = null;
+                    double enginePower = 0;
+                    VehicleType type = null;
+                    FuelType fuelType = null;
+                    switch (elements.item(c).getNodeName()){
+                        case "id":{
+                            id = Long.parseLong(elements.item(c).getTextContent());
+                            break;
+                        }
+                        case  "name":{
+                            name = elements.item(c).getTextContent();
+                            break;
+                        }
+                        case  "creationDate":{
+                            creationDate = LocalDate.parse(elements.item(c).getTextContent());
+                            break;
+                        }
+                        case "enginePower":{
+                            enginePower = Double.parseDouble(elements.item(c).getTextContent());
+                            break;
+                        }
+                        case "type":{
+                            type = VehicleType.valueOf(elements.item(c).getTextContent());
+                            break;
+                        }
+                        case "fuelType":{
+                            fuelType = FuelType.valueOf(elements.item(c).getTextContent());
+                            break;
+                        }
+                    }
+                    if(elements.item(c).equals("coordinates")){
+                        NodeList nodeCoordinates = elements.item(i).getChildNodes();
+                        long x = 0;
+                        Float y = null;
+                        for(int h = 0; h < nodeCoordinates.getLength(); h++){
+                            if (nodeCoordinates.item(h).getNodeType() != Node.ELEMENT_NODE){
+                                continue;
+                            }
+                            switch (nodeCoordinates.item(h).getNodeName()) {
+                                case "x":{
+                                    x = Long.parseLong(nodeCoordinates.item(h).getTextContent());
+                                    break;
+                                }
+                                case "y":{
+                                    y = Float.valueOf(nodeCoordinates.item(h).getTextContent());
+                                    break;
+                                }
+                            }
+                            coordinates = new Coordinates(x,y);
+                        }
+                    }
+                     Vehicle vehicle = new Vehicle(name, coordinates, enginePower, type, fuelType );
+                    vehicle.setId(id);
+                    vehicle.setCreationDate(creationDate);
+                    vehicles.add(vehicle);
+                }
+            }
+        }
+        else{
+            return null;
+        }
+        return vehicles;
+        /*в менеджере, если ретёрнится,
+         то сказать что файл пуст, и сразу предложить ввести команду add
+         */
+    }
+    /*
     public String parse() throws IOException {//фактическ парсю файл
         String string;
         char c;
@@ -88,9 +211,7 @@ public class FileRead {
         }
         return strings;
     }
-    /*
-    далее будут числа от балды, потом возьмём реально скипнутые байты
-    кста скипаем на байт +2
+
      */
     /*
     public long readId() throws IOException {

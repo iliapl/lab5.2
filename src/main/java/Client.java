@@ -23,7 +23,7 @@ try{
     File file = new File(e.getPATHcollection());
     FileInputStream fin = new FileInputStream(file);
     BufferedInputStream bufferedReader = new BufferedInputStream(fin);
-    FileRead reader = new FileRead(bufferedReader,scanner);
+    FileRead reader = new FileRead(bufferedReader, scanner, file);
     FileManager fileManager =new FileManager(reader);
     EmployeeCollection employeeCollection = new EmployeeCollection(fileManager.saveVehicles());
     EmployeeComand employeeComand = new EmployeeComand(fileManager, reader, employeeCollection);

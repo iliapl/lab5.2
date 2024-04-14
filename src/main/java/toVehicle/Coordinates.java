@@ -7,4 +7,12 @@ public class Coordinates {
         this.x = x;
         this.y = y;
     }
+
+    public void setY(Float y) {
+        this.y = y;
+    }
+
+    public void setX(long x) {
+        this.x = x;
+    }
 }

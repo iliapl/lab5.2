@@ -1,6 +1,7 @@
 package toVehicle;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.Objects;
 import java.io.Serializable;
@@ -22,6 +23,34 @@ public class Vehicle implements Serializable{
         this.type = type;
         this.fuelType = fuelType;
     }
+    public void setId(long id){
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setEnginePower(double enginePower) {
+        this.enginePower = enginePower;
+    }
+
+    public void setFuelType(FuelType fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public void setType(VehicleType type) {
+        this.type = type;
+    }
+
     @Override
     public int hashCode(){
         return (int)id;
@@ -54,4 +83,5 @@ public class Vehicle implements Serializable{
         type = vehicle.type;
         fuelType = vehicle.fuelType;
     }
+
 }
