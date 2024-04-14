@@ -44,6 +44,8 @@ public class EmployeeComand {
     }
 
     public void help() {
+
+
         System.out.println("info: Выводит информацию о коллекции");
         System.out.println("show: Выводит все элементы коллекции");
         System.out.println("add: Добавляет элемент в коллекцию");
