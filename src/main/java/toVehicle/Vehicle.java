@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.Objects;
 import java.io.Serializable;
+
 public class Vehicle implements Serializable{
     private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
@@ -15,7 +16,8 @@ public class Vehicle implements Serializable{
     private FuelType fuelType; //Поле может быть null
     private static long nextid =0;
     public  Vehicle(String name, Coordinates coordinates, double enginePower, VehicleType type, FuelType fuelType){
-        id=nextid++;
+        nextid++;
+        id=nextid;
         this.name = name;
         this.coordinates = coordinates;
         this.creationDate = java.time.LocalDate.now();
