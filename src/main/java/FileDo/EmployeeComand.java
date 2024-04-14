@@ -58,8 +58,8 @@ public class EmployeeComand {
         }
     }
 
-    public void add() throws IOException {
-        boolean success = employeeCollection.add(getVehicle());
+    public void add(String vehicleName) throws IOException {
+        boolean success = employeeCollection.add(getVehicle(vehicleName));
         if (!success) {
             System.out.println("Ошибка при добавлении элемента. Возможно, такой элемент уже существует.");
         }
