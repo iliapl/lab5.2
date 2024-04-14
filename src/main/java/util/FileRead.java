@@ -300,7 +300,7 @@ public class FileRead {
         }
         return  new Coordinates(x, y);
     }
-    public double readEnginePowerFromConsole(){
+    public int readEnginePowerFromConsole(){
         int enginePower;
         System.out.println("Введите значение enginePower");
         enginePower = scanner.nextInt();
