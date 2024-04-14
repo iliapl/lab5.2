@@ -2,8 +2,11 @@ package FileDo;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import toVehicle.Vehicle;
+import toVehicle.VehiclesCollecton;
 import util.FileRead;
+import util.WriteFileToXML;
 
+import javax.xml.bind.JAXBException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,23 +20,29 @@ import static org.apache.commons.text.lookup.DefaultStringLookup.XML;
 public class FileManager {
     FileRead fileRead;
     HashSet<Vehicle> vehicles;
-
-    public FileManager( FileRead fileRead) {
-
+    VehiclesCollecton vehiclesCollecton = new VehiclesCollecton();
+    WriteFileToXML writeFileToXML;
+    public FileManager(FileRead fileRead, WriteFileToXML writeFileToXML) {
         this.fileRead = fileRead;
+        this.writeFileToXML = writeFileToXML;
     }
     public HashSet<Vehicle> saveVehicles() throws IOException {
-        vehicles = fileRead.readVehiclefromFile();
-
-        return fileRead.readVehiclefromFile();
+        vehiclesCollecton.vehicleList = fileRead.parserXML();
+        return fileRead.parserXML();
     }
+    public void writeToXML() throws JAXBException {
+        writeFileToXML.saveVehiclesToXML(vehiclesCollecton);
+    }
+    /*
     public void saveToXml() throws IOException {
         XmlMapper xmlMapper = new XmlMapper();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         xmlMapper.writeValue(byteArrayOutputStream, vehicles);
         assertEquals(XML, byteArrayOutputStream.toString());
     }
-/*
+
+  ////////////////////////////////////////////////////////////////
+
     public HashSet<String> fileSave() throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
         HashSet<String> list = new HashSet<>();
