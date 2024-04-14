@@ -17,6 +17,7 @@ public class Client {
     public static void main(String[] args){
         System.out.println("получилось?");
         System.out.println("педро-педро-педро");
+        System.out.println("гитхаб 3ае6ал");
 try{
     EnvDoing e = new EnvDoing();
     Scanner scanner = new Scanner(System.in);
