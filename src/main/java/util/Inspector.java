@@ -33,6 +33,6 @@ public class Inspector {
             }
             maxId = Math.max(maxId, vehicle.getId());
         }
-        Vehicle.setNextId(maxId + 1);
+        Vehicle.setNextId((int) (maxId + 1));
     }
 }

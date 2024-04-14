@@ -1,10 +1,9 @@
 package toVehicle;
 
 public enum VehicleType {
+    HELICOPTER,
     DRONE,
     BOAT,
-    MOTORCYCLE;
-
-
-
+    SHIP,
+    BICYCLE;
 }

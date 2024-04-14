@@ -1,9 +1,9 @@
 package toVehicle;
 
 public enum FuelType {
-    GASOLINE,
+    KEROSENE,
     ELECTRICITY,
     DIESEL,
-    ALCOHOL,
-    NUCLEAR;
+    MANPOWER,
+    ANTIMATTER;
 }

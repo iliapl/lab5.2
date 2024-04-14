@@ -81,7 +81,7 @@ public class FileRead {
                     String name = null;
                     Coordinates coordinates = null;
                     java.time.LocalDate creationDate = null;
-                    double enginePower = 0;
+                    int enginePower = 0;
                     VehicleType type = null;
                     FuelType fuelType = null;
                     switch (elements.item(c).getNodeName()){
@@ -98,7 +98,7 @@ public class FileRead {
                             break;
                         }
                         case "enginePower":{
-                            enginePower = Double.parseDouble(elements.item(c).getTextContent());
+                            enginePower = Integer.parseInt(elements.item(c).getTextContent());
                             break;
                         }
                         case "type":{
@@ -132,7 +132,7 @@ public class FileRead {
                         }
                     }
                      Vehicle vehicle = new Vehicle(name, coordinates, enginePower, type, fuelType );
-                    vehicle.setId(id);
+                    vehicle.setId((int) id);
                     vehicle.setCreationDate(creationDate);
                     vehicles.add(vehicle);
                 }
@@ -301,9 +301,9 @@ public class FileRead {
         return  new Coordinates(x, y);
     }
     public double readEnginePowerFromConsole(){
-        double enginePower;
+        int enginePower;
         System.out.println("Введите значение enginePower");
-        enginePower = scanner.nextDouble();
+        enginePower = scanner.nextInt();
         if(enginePower <= 0 ){
             System.out.println("значение enginePower должно быть польше нуля, повторите попытку");
             return readEnginePowerFromConsole();
