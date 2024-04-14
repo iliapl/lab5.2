@@ -23,9 +23,9 @@ public class FileManager {
         this.fileRead = fileRead;
     }
     public HashSet<Vehicle> saveVehicles() throws IOException {
-        vehicles = fileRead.parserXML();
+        vehicles = fileRead.readVehiclefromFile();
 
-        return fileRead.parserXML();
+        return fileRead.readVehiclefromFile();
     }
     public void saveToXml() throws IOException {
         XmlMapper xmlMapper = new XmlMapper();

@@ -6,6 +6,7 @@ import org.w3c.dom.Document;
 import toVehicle.Vehicle;
 import util.EnvDoing;
 import util.FileRead;
+import util.WriteFileToXML;
 
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,7 +26,9 @@ try{
     FileInputStream fin = new FileInputStream(file);
     BufferedInputStream bufferedReader = new BufferedInputStream(fin);
     FileRead reader = new FileRead(bufferedReader, scanner, file);
-    FileManager fileManager =new FileManager(reader);
+    PrintWriter printWriter = new PrintWriter(file);
+    WriteFileToXML writeFileToXML = new WriteFileToXML(printWriter);
+    FileManager fileManager =new FileManager(reader, writeFileToXML);
     EmployeeCollection employeeCollection = new EmployeeCollection(fileManager.saveVehicles());
     EmployeeComand employeeComand = new EmployeeComand(fileManager, reader, employeeCollection);
     Consoler console = new Consoler(employeeComand,scanner);
