@@ -3,13 +3,13 @@ package FileDo;
 import toVehicle.Vehicle;
 import util.FileRead;
 
-import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
-import java.util.Set;
-import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
+import java.util.Set;
+
 public class EmployeeComand {
     private final Set<String> scriptNames;
     private final EmployeeCollection employeeCollection;
@@ -66,14 +66,19 @@ public class EmployeeComand {
     }
 
 
-    public HashSet<Vehicle> getVehicle() throws IOException {
+    public Vehicle getVehicle() throws IOException {
+        // Возвращаем по умолчанию или null, если не указано имя
+        return null;
+    }
 
-        if (isScriptExecuting) {
-            System.out.println("Попытка чтения элементов из скрипта");
-            return reader.readVehiclefromFile();
+    public Vehicle getVehicle(String name) throws IOException {
+        HashSet<Vehicle> vehicles = reader.parserXML();
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.getName().equals(name)) {
+                return vehicle;
+            }
         }
-        return reader.readVehiclefromFile();
-
+        return null;
     }
 
 

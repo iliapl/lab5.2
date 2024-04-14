@@ -23,17 +23,20 @@ public class FileRead {
     BufferedInputStream bufferedReaderin;
     private File file;
     HashSet<Vehicle> vehicles = new HashSet<>();
-    public  FileRead(BufferedInputStream bufferedReader,Scanner scanner, File file) {
+
+    public FileRead(BufferedInputStream bufferedReader, Scanner scanner, File file) {
         this.bufferedReaderin = bufferedReader;
         this.file = file;
         this.scanner = scanner;
         filewas = new Filewas();
     }
-    public Document buildDocument() throws SAXException, IOException ,ParserConfigurationException{
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            return docFactory.newDocumentBuilder().parse(bufferedReaderin);
+
+    public Document buildDocument() throws SAXException, IOException, ParserConfigurationException {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        return docFactory.newDocumentBuilder().parse(bufferedReaderin);
     }
-    public Node getFirstNode(){
+
+    public Node getFirstNode() {
         try {
             doc = buildDocument();
             return doc.getFirstChild();
@@ -43,38 +46,38 @@ public class FileRead {
         }
 
     }
-    public NodeList getNodes(){
+
+    public NodeList getNodes() {
         return getFirstNode().getChildNodes();
     }
 
-    public boolean canReadElements(){
+    public boolean canReadElements() {
         if (filewas.canReadFile(file)) {
-            if (getFirstNode() != null){
-               return true;
-            }
-            else {
+            if (getFirstNode() != null) {
+                return true;
+            } else {
                 System.out.println("Файл не содержит элементов");
                 return false;
             }
-        }
-        else{
-           return false;
+        } else {
+            return false;
         }
     }
+
     public HashSet<Vehicle> parserXML() {
-        if(canReadElements()){
+        if (canReadElements()) {
             NodeList nodeList = getNodes();
-            for(int i = 0; i < getNodes().getLength(); i++){
-                if(getNodes().item(i).getNodeType() != Node.ELEMENT_NODE){
+            for (int i = 0; i < getNodes().getLength(); i++) {
+                if (getNodes().item(i).getNodeType() != Node.ELEMENT_NODE) {
                     continue;
                 }
-                if(getNodes().item(i).equals("vehicle")){
+                if (getNodes().item(i).equals("vehicle")) {
                     continue;
                 }
                 NodeList elements = nodeList.item(i).getChildNodes();
-                for(int c = 0; c < elements.getLength(); c++){
+                for (int c = 0; c < elements.getLength(); c++) {
 
-                    if (elements.item(c).getNodeType() != Node.ELEMENT_NODE){
+                    if (elements.item(c).getNodeType() != Node.ELEMENT_NODE) {
                         continue;
                     }
                     long id = 0;
@@ -84,61 +87,60 @@ public class FileRead {
                     int enginePower = 0;
                     VehicleType type = null;
                     FuelType fuelType = null;
-                    switch (elements.item(c).getNodeName()){
-                        case "id":{
+                    switch (elements.item(c).getNodeName()) {
+                        case "id": {
                             id = Long.parseLong(elements.item(c).getTextContent());
                             break;
                         }
-                        case  "name":{
+                        case "name": {
                             name = elements.item(c).getTextContent();
                             break;
                         }
-                        case  "creationDate":{
+                        case "creationDate": {
                             creationDate = LocalDate.parse(elements.item(c).getTextContent());
                             break;
                         }
-                        case "enginePower":{
+                        case "enginePower": {
                             enginePower = Integer.parseInt(elements.item(c).getTextContent());
                             break;
                         }
-                        case "type":{
+                        case "type": {
                             type = VehicleType.valueOf(elements.item(c).getTextContent());
                             break;
                         }
-                        case "fuelType":{
+                        case "fuelType": {
                             fuelType = FuelType.valueOf(elements.item(c).getTextContent());
                             break;
                         }
                     }
-                    if(elements.item(c).equals("coordinates")){
+                    if (elements.item(c).equals("coordinates")) {
                         NodeList nodeCoordinates = elements.item(i).getChildNodes();
                         long x = 0;
                         Float y = null;
-                        for(int h = 0; h < nodeCoordinates.getLength(); h++){
-                            if (nodeCoordinates.item(h).getNodeType() != Node.ELEMENT_NODE){
+                        for (int h = 0; h < nodeCoordinates.getLength(); h++) {
+                            if (nodeCoordinates.item(h).getNodeType() != Node.ELEMENT_NODE) {
                                 continue;
                             }
                             switch (nodeCoordinates.item(h).getNodeName()) {
-                                case "x":{
+                                case "x": {
                                     x = Long.parseLong(nodeCoordinates.item(h).getTextContent());
                                     break;
                                 }
-                                case "y":{
+                                case "y": {
                                     y = Float.valueOf(nodeCoordinates.item(h).getTextContent());
                                     break;
                                 }
                             }
-                            coordinates = new Coordinates(x,y);
+                            coordinates = new Coordinates(x, y);
                         }
                     }
-                     Vehicle vehicle = new Vehicle(name, coordinates, enginePower, type, fuelType );
+                    Vehicle vehicle = new Vehicle(name, coordinates, enginePower, type, fuelType);
                     vehicle.setId((int) id);
                     vehicle.setCreationDate(creationDate);
                     vehicles.add(vehicle);
                 }
             }
-        }
-        else{
+        } else {
             return null;
         }
         return vehicles;
@@ -146,6 +148,7 @@ public class FileRead {
          то сказать что файл пуст, и сразу предложить ввести команду add
          */
     }
+
     /*
     public String parse() throws IOException {//фактическ парсю файл
         String string;
@@ -265,90 +268,91 @@ public class FileRead {
     }
      */
     public boolean canRead() throws IOException {
-        if(bufferedReaderin.available() != 0){
+        if (bufferedReaderin.available() != 0) {
             System.out.println("Файл может быть прочитан");
             return true;
-        }
-        else{
+        } else {
             System.out.println("Файл не может быть прочитан, количество байтов в файле" + bufferedReaderin.available());
             return false;
         }
     }
-    public Vehicle readVehicleFromConsole(){
-        return new Vehicle(readNamefromConsole(),readCordinatesFromConsole(), readEnginePowerFromConsole(), readVehicleTypeFromConsole(), readFuelTypeFromConsole() );
+
+    public Vehicle readVehicleFromConsole() {
+        return new Vehicle(readNamefromConsole(), readCordinatesFromConsole(), readEnginePowerFromConsole(), readVehicleTypeFromConsole(), readFuelTypeFromConsole());
     }
-    public String readNamefromConsole(){
+
+    public String readNamefromConsole() {
         System.out.println("Введите имя");
         String name = scanner.nextLine();
-        if(name == null|| name.isEmpty()){
+        if (name == null || name.isEmpty()) {
             System.out.println("Вы не ввели имя");
             return readNamefromConsole();
-        }
-        else{
+        } else {
             return name;
         }
     }
-    public Coordinates readCordinatesFromConsole(){
+
+    public Coordinates readCordinatesFromConsole() {
         Coordinates coordinates;
         System.out.println("Введите координату х");
         long x = scanner.nextLong();
         System.out.println("Введите координату, у должна быть < 597");
         Float y = scanner.nextFloat();
-        while(y == 0 || y>597) {
+        while (y == 0 || y > 597) {
             System.out.println("Вы не ввели координату, повторите попытку, y должна быть < 597");
             y = scanner.nextFloat();
         }
-        return  new Coordinates(x, y);
+        return new Coordinates(x, y);
     }
-    public int readEnginePowerFromConsole(){
+
+    public int readEnginePowerFromConsole() {
         int enginePower;
         System.out.println("Введите значение enginePower");
         enginePower = scanner.nextInt();
-        if(enginePower <= 0 ){
+        if (enginePower <= 0) {
             System.out.println("значение enginePower должно быть польше нуля, повторите попытку");
             return readEnginePowerFromConsole();
-        }
-        else {
+        } else {
             return enginePower;
         }
     }
-    public VehicleType readVehicleTypeFromConsole(){
+
+    public VehicleType readVehicleTypeFromConsole() {
         System.out.println("Тип машины и её номер");
         int nomber = 0;
         VehicleType[] types = new VehicleType[VehicleType.values().length];
-        for(VehicleType vehicleType : VehicleType.values()){
+        for (VehicleType vehicleType : VehicleType.values()) {
             types[nomber] = vehicleType;
             System.out.println(nomber + " " + vehicleType);
             nomber++;
         }
         System.out.println("напишите номер варианта");
         int inputnomber = scanner.nextInt();
-        if (inputnomber > nomber || inputnomber <= 0){
+        if (inputnomber > nomber || inputnomber <= 0) {
             System.out.println("Вы ввели несуществующий номер, повторите попытку");
             System.out.println("Напоминаем");
-           return readVehicleTypeFromConsole();
-        }
-        else{
+            return readVehicleTypeFromConsole();
+        } else {
             return types[inputnomber];
         }
     }
-    public FuelType readFuelTypeFromConsole(){
+
+    public FuelType readFuelTypeFromConsole() {
         System.out.println("Тип машины и её номер");
         int nomber = 0;
         FuelType[] types = new FuelType[VehicleType.values().length];
-        for(FuelType fuelType : FuelType.values()){
+        for (FuelType fuelType : FuelType.values()) {
             types[nomber] = fuelType;
             System.out.println(nomber + " " + fuelType);
             nomber++;
         }
         System.out.println("напишите номер варианта");
         int inputnomber = scanner.nextInt();
-        if (inputnomber > nomber || inputnomber <= 0){
+        if (inputnomber > nomber || inputnomber <= 0) {
             System.out.println("Вы ввели несуществующий номер, повторите попытку");
             System.out.println("Напоминаем");
             return readFuelTypeFromConsole();
-        }
-        else{
+        } else {
             return types[inputnomber];
         }
     }
