@@ -28,6 +28,21 @@ public class EmployeeComand {
         scriptNames = new HashSet<>();
     }
 
+    public Vehicle getVehicle() throws IOException {
+        // Возвращаем по умолчанию или null, если не указано имя
+        return null;
+    }
+
+    public Vehicle getVehicle(String name) throws IOException {
+        HashSet<Vehicle> vehicles = reader.parserXML();
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.getName().equals(name)) {
+                return vehicle;
+            }
+        }
+        return null;
+    }
+
     public void help() {
         System.out.println("info: Выводит информацию о коллекции");
         System.out.println("show: Выводит все элементы коллекции");
@@ -64,23 +79,6 @@ public class EmployeeComand {
             System.out.println("Ошибка при добавлении элемента. Возможно, такой элемент уже существует.");
         }
     }
-
-
-    public Vehicle getVehicle() throws IOException {
-        // Возвращаем по умолчанию или null, если не указано имя
-        return null;
-    }
-
-    public Vehicle getVehicle(String name) throws IOException {
-        HashSet<Vehicle> vehicles = reader.parserXML();
-        for (Vehicle vehicle : vehicles) {
-            if (vehicle.getName().equals(name)) {
-                return vehicle;
-            }
-        }
-        return null;
-    }
-
 
     public void updateID(String argument) {
         try {

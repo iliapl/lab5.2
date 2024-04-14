@@ -2,7 +2,8 @@ package toVehicle;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-public class Vehicle implements Serializable{
+
+public class Vehicle implements Serializable {
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -11,7 +12,8 @@ public class Vehicle implements Serializable{
     private VehicleType type; //Поле может быть null
     private FuelType fuelType; //Поле может быть null
     private static int nextid = 0;
-    public  Vehicle(String name, Coordinates coordinates, Integer enginePower, VehicleType type, FuelType fuelType){
+
+    public Vehicle(String name, Coordinates coordinates, Integer enginePower, VehicleType type, FuelType fuelType) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
@@ -35,7 +37,8 @@ public class Vehicle implements Serializable{
         this.type = type;
         this.fuelType = fuelType;
     }
-    public void setId(int id){
+
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -64,15 +67,16 @@ public class Vehicle implements Serializable{
     }
 
     @Override
-    public int hashCode(){
-        return (int)id;
+    public int hashCode() {
+        return (int) id;
     }
+
     @Override
-    public boolean equals(Object obj){
-            if(obj == this) return true;
-            if(obj == null || obj.getClass() != this.getClass()) return false;
-            Vehicle vehicle = (Vehicle) obj;
-            return (vehicle.id == this.id);
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        Vehicle vehicle = (Vehicle) obj;
+        return (vehicle.id == this.id);
     }
 
     public String getName() {
@@ -86,14 +90,15 @@ public class Vehicle implements Serializable{
     public Coordinates getCoordinates() {
         return coordinates;
     }
+
     public static void setNextId(Integer id) {
         nextid = id;
     }
+
     public void update(Vehicle vehicle) {
         name = vehicle.name;
         coordinates = vehicle.coordinates;
         type = vehicle.type;
         fuelType = vehicle.fuelType;
     }
-
 }
