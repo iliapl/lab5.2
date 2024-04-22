@@ -20,7 +20,7 @@ import static org.apache.commons.text.lookup.DefaultStringLookup.XML;
 public class FileManager {
     FileRead fileRead;
     HashSet<Vehicle> vehicles;
-    VehiclesCollecton vehiclesCollecton = new VehiclesCollecton();
+    VehiclesCollecton vehiclesCollecton;
     WriteFileToXML writeFileToXML;
     public FileManager(FileRead fileRead, WriteFileToXML writeFileToXML) {
         this.fileRead = fileRead;

@@ -2,6 +2,7 @@ package toVehicle;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Iterator;
 
 public class Vehicle implements Serializable {
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически

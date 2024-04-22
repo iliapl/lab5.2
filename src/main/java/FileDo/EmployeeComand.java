@@ -3,6 +3,7 @@ package FileDo;
 import toVehicle.Vehicle;
 import util.FileRead;
 
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -29,7 +30,6 @@ public class EmployeeComand {
     }
 
     public Vehicle getVehicle() throws IOException {
-        // Возвращаем по умолчанию или null, если не указано имя
         return null;
     }
 
@@ -44,8 +44,6 @@ public class EmployeeComand {
     }
 
     public void help() {
-
-
         System.out.println("info: Выводит информацию о коллекции");
         System.out.println("show: Выводит все элементы коллекции");
         System.out.println("add: Добавляет элемент в коллекцию");
@@ -98,7 +96,49 @@ public class EmployeeComand {
         }
     }
 
-    public void history() {
+    public void remove_by_id(String argument) {
+        try {
+            long id = Long.parseLong(argument);
+            if (employeeCollection.existElementWithId(id)) {
+                employeeCollection.removeById(id);
+                System.out.println("Элемент успешно удалён.");
+            } else {
+                System.out.println("Элемента с таким id не существует.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Ошибка при вводе целого числа.");
+        }
+    }
+
+    public void clear() {
+        employeeCollection.clear();
+        System.out.println("Коллекция очищена");
+    }
+
+    public void save() {
+        try {
+            fileManager.writeToXML();
+            System.out.println("Коллекция успешно сохранена в файл с расширением XML.");
+        } catch (JAXBException e) {
+            System.out.println("Ошибка при сохранении коллекции " + e.getMessage());
+        }
+    }
+
+    public void executeScriptFileName(String fileName) {
+        //пупупупу
+    }
+
+    public void EmergencyExit() {
+        System.out.println("Экстренное завершение программы.");
+        System.exit(0);
+    }
+
+    public void removeGreater(){
+        employeeCollection.removeGreater();
+        System.out.println("");
+    }
+
+    public void history(){
 
     }
 
