@@ -18,6 +18,8 @@ public class EmployeeComand {
     private final FileManager fileManager;
     private final Method[] methods;
     private boolean isScriptExecuting;
+
+    private CommandHistory commandHistory;
     private String history[] = new String[7];
 
     public EmployeeComand(FileManager fileManager, FileRead reader, EmployeeCollection employeeCollection) {
@@ -137,13 +139,26 @@ public class EmployeeComand {
         Vehicle vehicle = getVehicle(vehicleName);
         employeeCollection.addIfMin(vehicle);
     }
-    public void removeGreater(String vehicleName) throws IOException{
+
+    public void removeGreater(String vehicleName) throws IOException {
         Vehicle vehicle = getVehicle(vehicleName);
         employeeCollection.removeGreater(vehicle);
     }
 
-    public void history(){
+    public void history() {
+        commandHistory.printHistory();
+    }
 
+    public void sumOfEnginePower(){
+        employeeCollection.sumOfEnginePower();
+    }
+
+    public void averageOfEnginePower(){
+        employeeCollection.averageOfEnginePower();
+    }
+
+    public void printUniqueFuelType(){
+        employeeCollection.printUniqueFuelType();
     }
 
     private static String inputCommandToJavaStyle(String str) {
@@ -167,6 +182,7 @@ public class EmployeeComand {
     public boolean executeCommand(String inputLine) {
         String[] line = inputLine.trim().split(" ", 2);
         String command = inputCommandToJavaStyle(line[0].toLowerCase());
+        commandHistory.addCommand(command);
         if ("exit".equals(command)) {
             return true;
         }

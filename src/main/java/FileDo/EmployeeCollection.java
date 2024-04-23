@@ -1,9 +1,11 @@
 package FileDo;
 
+import toVehicle.FuelType;
 import toVehicle.Vehicle;
 
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class EmployeeCollection {
     private final Set<Vehicle> vehicles;
@@ -95,5 +97,40 @@ public class EmployeeCollection {
             }
         }
         return false;
+    }
+
+    public void sumOfEnginePower() {
+        int sum = vehicles.stream() // Используем stream для обхода коллекции
+                .mapToInt(Vehicle::getEnginePower) // Преобразуем в поток целых чисел
+                .sum(); // Считаем сумму
+        System.out.println("Сумма значений enginePower для всех элементов коллекции: " + sum);
+    }
+
+    public void averageOfEnginePower() {
+        OptionalDouble average = vehicles.stream() // Преобразуем коллекцию в поток
+                .mapToInt(Vehicle::getEnginePower) // Преобразуем в поток целых чисел
+                .average(); // Находим среднее значение
+
+        if (average.isPresent()) { // Проверяем, есть ли среднее значение
+            System.out.println("Среднее значение enginePower для всех элементов коллекции: " + average.getAsDouble());
+        } else {
+            System.out.println("Коллекция пуста, нет данных для расчета среднего.");
+        }
+    }
+
+    public void printUniqueFuelType() {
+        Set<FuelType> uniqueFuelTypes = vehicles.stream() // Преобразуем коллекцию в поток
+                .map(Vehicle::getFuelType) // Извлекаем значение поля fuelType
+                .filter(Objects::nonNull) // Удаляем null значения
+                .collect(Collectors.toSet()); // Собираем уникальные значения в Set
+
+        if (uniqueFuelTypes.isEmpty()) { // Если множество пустое
+            System.out.println("Нет уникальных значений поля fuelType в коллекции.");
+        } else {
+            System.out.println("Уникальные значения fuelType:");
+            for (FuelType fuelType : uniqueFuelTypes) {
+                System.out.println("- " + fuelType);
+            }
+        }
     }
 }
