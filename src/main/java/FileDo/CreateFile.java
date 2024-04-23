@@ -8,19 +8,21 @@ import java.io.FileNotFoundException;
 
 public class CreateFile {
     EnvDoing envDoing;
-    public CreateFile(EnvDoing envDoing){
+
+    public CreateFile(EnvDoing envDoing) {
         this.envDoing = envDoing;
     }
-            FileInputStream inputstream;
+
+    FileInputStream inputstream;
 
     {
         try {
             inputstream = new FileInputStream(envDoing.getPATHcollection());
             File operationFile = new File("C:\\Users\\plysc\\IdeaProjects\\file\\operationFile.xml");
-            if (){}
+            if () {
+            }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-
     }
 }
