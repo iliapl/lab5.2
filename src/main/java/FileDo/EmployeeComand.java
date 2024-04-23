@@ -18,6 +18,8 @@ public class EmployeeComand {
     private final FileManager fileManager;
     private final Method[] methods;
     private boolean isScriptExecuting;
+
+    private CommandHistory commandHistory;
     private String history[] = new String[7];
 
     public EmployeeComand(FileManager fileManager, FileRead reader, EmployeeCollection employeeCollection) {
@@ -95,7 +97,6 @@ public class EmployeeComand {
             throw new RuntimeException(e);
         }
     }
-    /*
 
     public void remove_by_id(String argument) {
         try {
@@ -110,8 +111,6 @@ public class EmployeeComand {
             System.out.println("Ошибка при вводе целого числа.");
         }
     }
-
-     */
 
     public void clear() {
         employeeCollection.clear();
@@ -135,16 +134,31 @@ public class EmployeeComand {
         System.out.println("Экстренное завершение программы.");
         System.exit(0);
     }
-    /*
-    public void removeGreater(){
-        employeeCollection.removeGreater();
-        System.out.println("");
+
+    public void addIfMin(String vehicleName) throws IOException {
+        Vehicle vehicle = getVehicle(vehicleName);
+        employeeCollection.addIfMin(vehicle);
     }
 
-     */
+    public void removeGreater(String vehicleName) throws IOException {
+        Vehicle vehicle = getVehicle(vehicleName);
+        employeeCollection.removeGreater(vehicle);
+    }
 
-    public void history(){
+    public void history() {
+        commandHistory.printHistory();
+    }
 
+    public void sumOfEnginePower(){
+        employeeCollection.sumOfEnginePower();
+    }
+
+    public void averageOfEnginePower(){
+        employeeCollection.averageOfEnginePower();
+    }
+
+    public void printUniqueFuelType(){
+        employeeCollection.printUniqueFuelType();
     }
 
     private static String inputCommandToJavaStyle(String str) {
@@ -168,6 +182,7 @@ public class EmployeeComand {
     public boolean executeCommand(String inputLine) {
         String[] line = inputLine.trim().split(" ", 2);
         String command = inputCommandToJavaStyle(line[0].toLowerCase());
+        commandHistory.addCommand(command);
         if ("exit".equals(command)) {
             return true;
         }
