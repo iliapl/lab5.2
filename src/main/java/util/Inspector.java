@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Inspector {
+    /*
     private static final Map<Integer, Integer> ID_MAP;
     private static ValidatorFactory factory;
     private static Validator validator;
@@ -35,4 +36,6 @@ public class Inspector {
         }
         Vehicle.setNextId((int) (maxId + 1));
     }
+
+     */
 }

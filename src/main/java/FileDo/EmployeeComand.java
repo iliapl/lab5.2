@@ -95,6 +95,7 @@ public class EmployeeComand {
             throw new RuntimeException(e);
         }
     }
+    /*
 
     public void remove_by_id(String argument) {
         try {
@@ -109,6 +110,8 @@ public class EmployeeComand {
             System.out.println("Ошибка при вводе целого числа.");
         }
     }
+
+     */
 
     public void clear() {
         employeeCollection.clear();
@@ -132,11 +135,13 @@ public class EmployeeComand {
         System.out.println("Экстренное завершение программы.");
         System.exit(0);
     }
-
+    /*
     public void removeGreater(){
         employeeCollection.removeGreater();
         System.out.println("");
     }
+
+     */
 
     public void history(){
 

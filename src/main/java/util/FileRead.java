@@ -33,7 +33,7 @@ public class FileRead {
 
     public Document buildDocument() throws SAXException, IOException, ParserConfigurationException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-        return docFactory.newDocumentBuilder().parse(bufferedReaderin);
+        return docFactory.newDocumentBuilder().parse(file);
     }
 
     public Node getFirstNode() {
@@ -60,6 +60,7 @@ public class FileRead {
                 return false;
             }
         } else {
+            System.out.println("Парсинг не может быть выполнен");
             return false;
         }
     }
@@ -75,9 +76,9 @@ public class FileRead {
                     continue;
                 }
                 NodeList elements = nodeList.item(i).getChildNodes();
-                for (int c = 0; c < elements.getLength(); c++) {
+                for (int co = 0; co < elements.getLength(); co++) {
 
-                    if (elements.item(c).getNodeType() != Node.ELEMENT_NODE) {
+                    if (elements.item(co).getNodeType() != Node.ELEMENT_NODE) {
                         continue;
                     }
                     long id = 0;
@@ -87,33 +88,33 @@ public class FileRead {
                     int enginePower = 0;
                     VehicleType type = null;
                     FuelType fuelType = null;
-                    switch (elements.item(c).getNodeName()) {
+                    switch (elements.item(co).getNodeName()) {
                         case "id": {
-                            id = Long.parseLong(elements.item(c).getTextContent());
+                            id = Long.parseLong(elements.item(co).getTextContent());
                             break;
                         }
                         case "name": {
-                            name = elements.item(c).getTextContent();
+                            name = elements.item(co).getTextContent();
                             break;
                         }
                         case "creationDate": {
-                            creationDate = LocalDate.parse(elements.item(c).getTextContent());
+                            creationDate = LocalDate.parse(elements.item(co).getTextContent());
                             break;
                         }
                         case "enginePower": {
-                            enginePower = Integer.parseInt(elements.item(c).getTextContent());
+                            enginePower = Integer.parseInt(elements.item(co).getTextContent());
                             break;
                         }
                         case "type": {
-                            type = VehicleType.valueOf(elements.item(c).getTextContent());
+                            type = VehicleType.valueOf(elements.item(co).getTextContent());
                             break;
                         }
                         case "fuelType": {
-                            fuelType = FuelType.valueOf(elements.item(c).getTextContent());
+                            fuelType = FuelType.valueOf(elements.item(co).getTextContent());
                             break;
                         }
                     }
-                    if (elements.item(c).equals("coordinates")) {
+                    if (elements.item(co).equals("coordinates")) {
                         NodeList nodeCoordinates = elements.item(i).getChildNodes();
                         long x = 0;
                         Float y = null;
@@ -140,13 +141,12 @@ public class FileRead {
                     vehicles.add(vehicle);
                 }
             }
-        } else {
-            return null;
+        }
+        else
+        {
+            vehicles = null;
         }
         return vehicles;
-        /*в менеджере, если ретёрнится,
-         то сказать что файл пуст, и сразу предложить ввести команду add
-         */
     }
 
     /*

@@ -27,8 +27,13 @@ public class FileManager {
         this.writeFileToXML = writeFileToXML;
     }
     public HashSet<Vehicle> saveVehicles() throws IOException {
-        vehiclesCollecton.vehicleList = fileRead.parserXML();
-        return fileRead.parserXML();
+        if (fileRead.parserXML() != null) {
+            vehiclesCollecton.vehicleList = fileRead.parserXML();
+            return fileRead.parserXML();
+        }
+        else{
+            return null;
+        }
     }
     public void writeToXML() throws JAXBException {
         writeFileToXML.saveVehiclesToXML(vehiclesCollecton);
