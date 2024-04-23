@@ -13,7 +13,14 @@ public class Filewas {
                 return false;
             } else {
                 System.out.println("Файл считан");
-                return true;
+                System.out.println("Файл содержит" +" " + file.length() + " " + "элементов");
+                if(file.length()==0){
+                    System.out.println("Файл пуст");
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
         } else {
             System.out.println("Файл не может быть считан, ввиду его отрицательного существования");

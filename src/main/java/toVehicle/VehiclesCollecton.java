@@ -13,6 +13,6 @@ import java.util.HashSet;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class VehiclesCollecton {
     @XmlElement
-    @XmlElementWrapper(name ="vehicle")
+    @XmlElementWrapper(name = "vehicle")
     public HashSet<Vehicle> vehicleList;
 }

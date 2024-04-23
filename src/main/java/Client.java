@@ -9,10 +9,13 @@ import util.FileRead;
 import util.WriteFileToXML;
 
 
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Scanner;
+
 
 public class Client {
     public static void main(String[] args){
@@ -26,7 +29,7 @@ try{
     FileInputStream fin = new FileInputStream(file);
     BufferedInputStream bufferedReader = new BufferedInputStream(fin);
     FileRead reader = new FileRead(bufferedReader, scanner, file);
-    PrintWriter printWriter = new PrintWriter(file);
+    PrintWriter printWriter = new PrintWriter(file, StandardCharsets.UTF_8);
     WriteFileToXML writeFileToXML = new WriteFileToXML(printWriter);
     FileManager fileManager =new FileManager(reader, writeFileToXML);
     EmployeeCollection employeeCollection = new EmployeeCollection(fileManager.saveVehicles());
@@ -38,6 +41,12 @@ try{
     throw new RuntimeException(e);
 } catch (IOException e) {
     throw new RuntimeException(e);
+    /*} catch (JAXBException e) {
+    throw new RuntimeException(e);
+
+     */
 }
+
+
     }
 }

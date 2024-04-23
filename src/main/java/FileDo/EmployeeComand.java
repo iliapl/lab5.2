@@ -4,7 +4,6 @@ import toVehicle.Vehicle;
 import util.FileRead;
 
 import javax.xml.bind.JAXBException;
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,7 +18,7 @@ public class EmployeeComand {
     private final FileManager fileManager;
     private final Method[] methods;
     private boolean isScriptExecuting;
-    private CommandHistory commandHistory;
+    private String history[] = new String[7];
 
     public EmployeeComand(FileManager fileManager, FileRead reader, EmployeeCollection employeeCollection) {
         this.fileManager = fileManager;
@@ -28,7 +27,6 @@ public class EmployeeComand {
         this.methods = EmployeeComand.class.getMethods();
         this.isScriptExecuting = false;
         scriptNames = new HashSet<>();
-        this.commandHistory = new CommandHistory();
     }
 
     public Vehicle getVehicle() throws IOException {
@@ -43,42 +41,6 @@ public class EmployeeComand {
             }
         }
         return null;
-    }
-
-    public boolean executeCommand(String inputLine) {
-        String[] line = inputLine.trim().split(" ", 2);
-        String command = inputCommandToJavaStyle(line[0].toLowerCase());
-        commandHistory.addCommand(command);
-        if ("exit".equals(command)) {
-            return true;
-        }
-        try {
-            Method methodToInvoke = null;
-            for (Method method : methods) {
-                if (method.getName().equals(command)) {
-                    methodToInvoke = method;
-                    break;
-                }
-            }
-            if (methodToInvoke == null) {
-                throw new NoSuchMethodException();
-            }
-            if (line.length == 1) {
-                methodToInvoke.invoke(this);
-            } else {
-                methodToInvoke.invoke(this, line[1]);
-            }
-        } catch (NoSuchMethodException | IllegalArgumentException e) {
-            System.out.println("Такой команды не существует");
-        } catch (InvocationTargetException e) {
-            if (e.getCause().getClass().equals(NoSuchElementException.class)) {
-                return true;
-            }
-            System.out.println(e.getCause().getMessage());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     public void help() {
@@ -162,7 +124,8 @@ public class EmployeeComand {
         }
     }
 
-    public void executeScriptFileName(File file) {
+    public void executeScriptFileName(String fileName) {
+        //пупупупу
     }
 
     public void EmergencyExit() {
@@ -174,26 +137,13 @@ public class EmployeeComand {
         Vehicle vehicle = getVehicle(vehicleName);
         employeeCollection.addIfMin(vehicle);
     }
-
-    public void removeGreater(String vehicleName) throws IOException {
+    public void removeGreater(String vehicleName) throws IOException{
         Vehicle vehicle = getVehicle(vehicleName);
         employeeCollection.removeGreater(vehicle);
     }
 
-    public void history() {
-        commandHistory.printHistory();
-    }
+    public void history(){
 
-    public void sumOfEngenyPower() {
-        employeeCollection.sumOfEngenyPower();
-    }
-
-    public void averageOfEnginePower() {
-        employeeCollection.averageOfEnginePower();
-    }
-
-    public void printUniqueFuelType() {
-        employeeCollection.printUniqueFuelType();
     }
 
     private static String inputCommandToJavaStyle(String str) {
@@ -212,6 +162,41 @@ public class EmployeeComand {
             }
         }
         return result.toString();
+    }
+
+    public boolean executeCommand(String inputLine) {
+        String[] line = inputLine.trim().split(" ", 2);
+        String command = inputCommandToJavaStyle(line[0].toLowerCase());
+        if ("exit".equals(command)) {
+            return true;
+        }
+        try {
+            Method methodToInvoke = null;
+            for (Method method : methods) {
+                if (method.getName().equals(command)) {
+                    methodToInvoke = method;
+                    break;
+                }
+            }
+            if (methodToInvoke == null) {
+                throw new NoSuchMethodException();
+            }
+            if (line.length == 1) {
+                methodToInvoke.invoke(this);
+            } else {
+                methodToInvoke.invoke(this, line[1]);
+            }
+        } catch (NoSuchMethodException | IllegalArgumentException e) {
+            System.out.println("Такой команды не существует");
+        } catch (InvocationTargetException e) {
+            if (e.getCause().getClass().equals(NoSuchElementException.class)) {
+                return true;
+            }
+            System.out.println(e.getCause().getMessage());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
 
