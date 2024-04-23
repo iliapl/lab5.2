@@ -133,9 +133,13 @@ public class EmployeeComand {
         System.exit(0);
     }
 
-    public void removeGreater(){
-        employeeCollection.removeGreater();
-        System.out.println("");
+    public void addIfMin(String vehicleName) throws IOException {
+        Vehicle vehicle = getVehicle(vehicleName);
+        employeeCollection.addIfMin(vehicle);
+    }
+    public void removeGreater(String vehicleName) throws IOException{
+        Vehicle vehicle = getVehicle(vehicleName);
+        employeeCollection.removeGreater(vehicle);
     }
 
     public void history(){

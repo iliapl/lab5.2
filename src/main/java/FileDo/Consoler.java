@@ -7,7 +7,6 @@ import java.util.Scanner;
 public class Consoler {
     private Scanner scanner;
     private EmployeeComand employeeComand;
-
     private boolean isRunning;
 
     public Consoler(EmployeeComand employeeComand, Scanner scanner) {

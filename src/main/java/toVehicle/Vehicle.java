@@ -96,6 +96,10 @@ public class Vehicle implements Serializable {
         nextid = id;
     }
 
+    public Integer getEnginePower() {
+        return enginePower;
+    }
+
     public void update(Vehicle vehicle) {
         name = vehicle.name;
         coordinates = vehicle.coordinates;

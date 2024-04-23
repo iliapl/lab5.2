@@ -31,8 +31,24 @@ public class EmployeeCollection {
         }
     }
 
+    public void addIfMin(Vehicle vehicle) {
+        Optional<Vehicle> minVehicle = vehicles.stream()
+                .min((v1, v2) -> v1.getEnginePower().compareTo(v2.getEnginePower()));
+        if (minVehicle.isPresent() && vehicle.getEnginePower() < minVehicle.get().getEnginePower()) {
+            boolean success = vehicles.add(vehicle);
+            if (success) {
+                System.out.println("Элемент успешно добавлен в коллекцию.");
+            } else {
+                System.out.println("Ошибка при добавлении элемента. Возможно, такой элемент уже существует.");
+            }
+        } else {
+            System.out.println("Элемент не добавлен. Новый элемент должен иметь значение enginePower меньше, чем у наименьшего элемента в коллекции.");
+        }
+    }
+
     public void removeGreater(Vehicle vehicle) {
         vehicles.removeIf(setVehicle -> setVehicle.getName().compareTo(vehicle.getName()) > 0);
+        System.out.println("Все элементы, превышающие заданный, удалены из коллекции");
     }
 
     public String getCollectionName() {
