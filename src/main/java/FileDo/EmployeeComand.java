@@ -19,9 +19,6 @@ public class EmployeeComand {
     private final Method[] methods;
     private boolean isScriptExecuting;
 
-    private CommandHistory commandHistory;
-    private String history[] = new String[7];
-
     public EmployeeComand(FileManager fileManager, FileRead reader, EmployeeCollection employeeCollection) {
         this.fileManager = fileManager;
         this.reader = reader;
@@ -71,12 +68,12 @@ public class EmployeeComand {
 
     public void show() {
         for (Vehicle vehicle : employeeCollection.getCollection()) {
-            System.out.println(vehicle);
+            System.out.println("Вывод всех элементов коллекции" + vehicle);
         }
     }
 
-    public void add(String vehicleName) throws IOException {
-        boolean success = employeeCollection.add(getVehicle(vehicleName));
+    public void add() throws IOException {
+        boolean success = employeeCollection.add(getVehicle());
         if (!success) {
             System.out.println("Ошибка при добавлении элемента. Возможно, такой элемент уже существует.");
         }

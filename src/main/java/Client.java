@@ -34,7 +34,6 @@ public class Client {
             EmployeeComand employeeComand = new EmployeeComand(fileManager, reader, employeeCollection);
             Consoler console = new Consoler(employeeComand, scanner);
             console.start();
-
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
