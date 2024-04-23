@@ -26,7 +26,6 @@ public class Filewas {
             System.out.println("Файл не может быть считан, ввиду его отрицательного существования");
             return false;
         }
-
     }
 }
 
