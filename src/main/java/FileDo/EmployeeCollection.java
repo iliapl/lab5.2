@@ -12,9 +12,15 @@ public class EmployeeCollection {
     private final java.time.ZonedDateTime creationDate;
 
     public EmployeeCollection(HashSet<Vehicle> vehicles) {
-        this.vehicles = new HashSet<>(vehicles);
-        this.vehicles.addAll(vehicles);
-        creationDate = java.time.ZonedDateTime.now();
+        if(vehicles != null) {
+            this.vehicles = vehicles;
+            this.vehicles.addAll(vehicles);
+            creationDate = java.time.ZonedDateTime.now();
+        }
+        else{
+            this.vehicles = null;
+            creationDate = java.time.ZonedDateTime.now();
+        }
     }
 
     public NavigableSet<Vehicle> getCollection() {
