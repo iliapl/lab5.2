@@ -1,7 +1,4 @@
-import FileDo.Consoler;
-import FileDo.EmployeeCollection;
-import FileDo.EmployeeComand;
-import FileDo.FileManager;
+import FileDo.*;
 import org.w3c.dom.Document;
 import toVehicle.Vehicle;
 import util.EnvDoing;
@@ -25,11 +22,12 @@ public class Client {
 try{
     EnvDoing e = new EnvDoing();
     Scanner scanner = new Scanner(System.in);
-    File file = new File(e.getPATHcollection());
-    FileInputStream fin = new FileInputStream(file);
+    CreateFile createFile = new CreateFile();
+    createFile.create();
+    FileInputStream fin = new FileInputStream(createFile.getPATHoperationFile());
     BufferedInputStream bufferedReader = new BufferedInputStream(fin);
-    FileRead reader = new FileRead(bufferedReader, scanner, file);
-    PrintWriter printWriter = new PrintWriter(file, StandardCharsets.UTF_8);
+    FileRead reader = new FileRead(bufferedReader, scanner, createFile.getOperationFile());
+    PrintWriter printWriter = new PrintWriter(createFile.getOperationFile(), StandardCharsets.UTF_8);
     WriteFileToXML writeFileToXML = new WriteFileToXML(printWriter);
     FileManager fileManager =new FileManager(reader, writeFileToXML);
     EmployeeCollection employeeCollection = new EmployeeCollection(fileManager.saveVehicles());
