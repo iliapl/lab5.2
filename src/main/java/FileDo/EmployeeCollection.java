@@ -1,9 +1,11 @@
 package FileDo;
 
+import toVehicle.FuelType;
 import toVehicle.Vehicle;
 
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class EmployeeCollection {
     private final Set<Vehicle> vehicles;
@@ -49,6 +51,35 @@ public class EmployeeCollection {
     public void removeGreater(Vehicle vehicle) {
         vehicles.removeIf(setVehicle -> setVehicle.getName().compareTo(vehicle.getName()) > 0);
         System.out.println("Все элементы, превышающие заданный, удалены из коллекции");
+    }
+
+    public void sumOfEngenyPower() {
+        int sum = vehicles.stream().mapToInt(Vehicle::getEnginePower).sum();
+        System.out.println("Сумма значений enginePower для всех элементов коллекции: " + sum);
+    }
+
+    public void averageOfEnginePower() {
+        OptionalDouble average = vehicles.stream().mapToInt(Vehicle::getEnginePower).average();
+        if (average.isPresent()) {
+            System.out.println("Среднее значение enginePower для всех элементов коллекции: " + average.getAsDouble());
+        } else {
+            System.out.println("Коллекция пуста, нет данных для расчета среднего.");
+        }
+    }
+
+    public void printUniqueFuelType() {
+        Set<FuelType> uniqueFuelTypes = vehicles.stream()
+                .map(Vehicle::getFuelType)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        if (uniqueFuelTypes.isEmpty()) {
+            System.out.println("Нет уникальных значений поля fuelType в коллекции.");
+        } else {
+            System.out.println("Уникальные значения fuelType:");
+            for (FuelType fuelType : uniqueFuelTypes) {
+                System.out.println("- " + fuelType);
+            }
+        }
     }
 
     public String getCollectionName() {

@@ -106,4 +106,8 @@ public class Vehicle implements Serializable {
         type = vehicle.type;
         fuelType = vehicle.fuelType;
     }
+
+    public FuelType getFuelType() {
+        return fuelType;
+    }
 }
