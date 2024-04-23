@@ -13,12 +13,11 @@ public class Filewas {
                 return false;
             } else {
                 System.out.println("Файл считан");
-                System.out.println("Файл содержит" +" " + file.length() + " " + "элементов");
-                if(file.length()==0){
+                System.out.println("Файл содержит" + " " + file.length() + " " + "элементов");
+                if (file.length() == 0) {
                     System.out.println("Файл пуст");
                     return false;
-                }
-                else {
+                } else {
                     return true;
                 }
             }

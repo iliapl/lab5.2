@@ -5,13 +5,13 @@ import java.time.LocalDate;
 import java.util.Iterator;
 
 public class Vehicle implements Serializable {
-    private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private String name; //Поле не может быть null, Строка не может быть пустой
-    private Coordinates coordinates; //Поле не может быть null
-    private java.time.LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-    private Integer enginePower; //Значение поля должно быть больше 0
-    private VehicleType type; //Поле может быть null
-    private FuelType fuelType; //Поле может быть null
+    private int id;
+    private String name;
+    private Coordinates coordinates;
+    private java.time.LocalDate creationDate;
+    private Integer enginePower;
+    private VehicleType type;
+    private FuelType fuelType;
     private static int nextid = 0;
 
     public Vehicle(String name, Coordinates coordinates, Integer enginePower, VehicleType type, FuelType fuelType) {
@@ -43,28 +43,8 @@ public class Vehicle implements Serializable {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
-    }
-
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public void setEnginePower(int enginePower) {
-        this.enginePower = enginePower;
-    }
-
-    public void setFuelType(FuelType fuelType) {
-        this.fuelType = fuelType;
-    }
-
-    public void setType(VehicleType type) {
-        this.type = type;
     }
 
     @Override
@@ -86,14 +66,6 @@ public class Vehicle implements Serializable {
 
     public long getId() {
         return id;
-    }
-
-    public Coordinates getCoordinates() {
-        return coordinates;
-    }
-
-    public static void setNextId(Integer id) {
-        nextid = id;
     }
 
     public Integer getEnginePower() {

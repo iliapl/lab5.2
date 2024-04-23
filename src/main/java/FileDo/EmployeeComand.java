@@ -146,18 +146,17 @@ public class EmployeeComand {
     }
 
     public void history() {
-        commandHistory.printHistory();
     }
 
-    public void sumOfEnginePower(){
+    public void sumOfEnginePower() {
         employeeCollection.sumOfEnginePower();
     }
 
-    public void averageOfEnginePower(){
+    public void averageOfEnginePower() {
         employeeCollection.averageOfEnginePower();
     }
 
-    public void printUniqueFuelType(){
+    public void printUniqueFuelType() {
         employeeCollection.printUniqueFuelType();
     }
 
@@ -182,7 +181,6 @@ public class EmployeeComand {
     public boolean executeCommand(String inputLine) {
         String[] line = inputLine.trim().split(" ", 2);
         String command = inputCommandToJavaStyle(line[0].toLowerCase());
-        commandHistory.addCommand(command);
         if ("exit".equals(command)) {
             return true;
         }

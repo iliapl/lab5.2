@@ -13,13 +13,15 @@ import java.util.HashSet;
 
 public class WriteFileToXML {
     private PrintWriter printWriter;
-    public WriteFileToXML(PrintWriter printWriter){
+
+    public WriteFileToXML(PrintWriter printWriter) {
         this.printWriter = printWriter;
     }
-public void saveVehiclesToXML(VehiclesCollecton vehicles) throws JAXBException {
-    JAXBContext jaxbContext = JAXBContext.newInstance(Vehicle.class);
-    Marshaller marshaller = jaxbContext.createMarshaller();
-    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-    marshaller.marshal(vehicles, printWriter);
-}
+
+    public void saveVehiclesToXML(VehiclesCollecton vehicles) throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Vehicle.class);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        marshaller.marshal(vehicles, printWriter);
+    }
 }

@@ -19,7 +19,7 @@ public class Consoler {
         boolean needExit = false;
         while (!needExit) {
             System.out.println("Введите комманду");
-                inputLine = scanner.nextLine();
+            inputLine = scanner.nextLine();
             needExit = employeeComand.executeCommand(inputLine);
         }
     }
