@@ -32,7 +32,7 @@ public class EmployeeCollection {
 
     public void clear() {
         if (vehicles.isEmpty()) {
-            System.out.println("Коллекция пуста, поэтому очистить можно только твои грехи");
+            System.out.println("Коллекция пуста");
         } else {
             vehicles.clear();
         }
