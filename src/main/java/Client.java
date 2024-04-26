@@ -25,12 +25,12 @@ try{
     createFile.create();
 
      */
-    File file = new File("C:\\Users\\plysc\\IdeaProjects\\file\\collection.xml");
-    FileInputStream fin = new FileInputStream("C:\\Users\\plysc\\IdeaProjects\\file\\collection.xml");
+    File file = new File(e.getPATHcollection());
+    FileInputStream fin = new FileInputStream(e.getPATHcollection());
     BufferedInputStream bufferedReader = new BufferedInputStream(fin);
     FileRead reader = new FileRead(bufferedReader, scanner,file);
     //ща станет 0
-    FileOutputStream fileOutputStream = new FileOutputStream("C:\\Users\\plysc\\IdeaProjects\\file\\operationFile.xml", true);
+    FileOutputStream fileOutputStream = new FileOutputStream(e.getPATHcollection(), true);
     PrintWriter printWriter = new PrintWriter(fileOutputStream);
     WriteFileToXML writeFileToXML = new WriteFileToXML(printWriter);
     FileManager fileManager =new FileManager(reader, writeFileToXML);
