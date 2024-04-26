@@ -1,31 +1,31 @@
 package FileDo;
 
-
 import java.io.*;
 
 public class CreateFile {
 
-    File operationFile;
+    File operationFile = new File("/Users/ahahac_be3_xboctuka/Desktop/lab5-3.2-master/collection.xml");
 
     public void create() {
-        try {
-            FileInputStream inputstream;
-            inputstream = new FileInputStream("C:/Users/plysc/IdeaProjects/file/collection.xml");
-            operationFile = new File("C:/Users/plysc/IdeaProjects/file/operationFile.xml");
-            if (operationFile.exists()) {
-                operationFile.mkdir();
-            }
-            try (FileOutputStream outputStream = new FileOutputStream("C:/Users/plysc/IdeaProjects/file/operationFile.xml", true)) {
-                byte[] bytes = new byte[inputstream.available()];
-                int length;
-                while ((length = inputstream.read(bytes)) != -1) {
-                    outputStream.write(bytes, 0, length);
-                }
-            } catch (IOException e) {
+        String sourcePath = "Users/ahahac_be3_xboctuka/Desktop/lab5-3.2-master/collection.xml";
+        File sourceFile = new File(sourcePath);
+        if (!sourceFile.exists()) {
+            System.out.println("Source file does not exist: " + sourceFile.getAbsolutePath());
+            return;
+        }
 
+        try (FileInputStream inputstream = new FileInputStream(sourceFile);
+             FileOutputStream outputStream = new FileOutputStream(operationFile, true)) {
+            int i;
+            while ((i = inputstream.read()) != -1) {
+                outputStream.write(i);
             }
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            System.out.println("File not found: " + e.getMessage());
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("IO Exception: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

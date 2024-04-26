@@ -7,9 +7,9 @@ import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
+
+import static org.apache.commons.lang.StringUtils.equalsIgnoreCase;
 
 public class EmployeeComand {
     private final Set<String> scriptNames;
@@ -28,25 +28,11 @@ public class EmployeeComand {
         scriptNames = new HashSet<>();
     }
 
-    public Vehicle getVehicle() throws IOException {
-        return null;
-    }
-
-    public Vehicle getVehicle(String name) throws IOException {
-        HashSet<Vehicle> vehicles = reader.parserXML();
-        for (Vehicle vehicle : vehicles) {
-            if (vehicle.getName().equals(name)) {
-                return vehicle;
-            }
-        }
-        return null;
-    }
-
     public void help() {
         System.out.println("info: Выводит информацию о коллекции");
         System.out.println("show: Выводит все элементы коллекции");
         System.out.println("add: Добавляет элемент в коллекцию");
-        System.out.println("updateID: Обновляет значение элемента коллекции, id которого равен заданному");
+        System.out.println("updateid: Обновляет значение элемента коллекции, id которого равен заданному");
         System.out.println("remove_by_id: Удаляет элемент из коллекции по его id");
         System.out.println("clear: Очищает коллекцию");
         System.out.println("save: Сохраняет коллекцию в файл");
@@ -67,96 +53,129 @@ public class EmployeeComand {
     }
 
     public void show() {
-        for (Vehicle vehicle : employeeCollection.getCollection()) {
-            System.out.println("Вывод всех элементов коллекции: " + vehicle);
+        Set<Vehicle> vehicles = employeeCollection.getVehicles();
+        if (vehicles == null || vehicles.isEmpty()) {
+            System.out.println("Нет vehicles в коллекции");
+        } else {
+            System.out.println("Vehicles в коллекции");
+            for (Vehicle vehicle : vehicles) {
+                System.out.println(vehicle.vehicleToString());
+            }
         }
     }
 
-    public void add() throws IOException {
-        boolean success = employeeCollection.add(getVehicle());
-        if (!success) {
-            System.out.println("Ошибка при добавлении элемента. Возможно, такой элемент уже существует.");
-        }
+    public void add(Vehicle newVehicle) {
+        if (newVehicle == null) {
+            throw new IllegalArgumentException("Нельзя добавить пустой vehicle в коллекцию");
+        } // проверяем, newVehicle null или нет
+        Set<Vehicle> vehicles = employeeCollection.getVehicles();// пытаемся получить текущую коллекцию при помощи getVehicles()
+        if (vehicles == null) {
+            vehicles = new HashSet<>();
+        } // если такой нет, то инициализируется новая коллекция
+        vehicles.add(newVehicle);
+        System.out.println("Vehicle добавлен: " + newVehicle.vehicleToString());
     }
 
-    public void updateID(String argument) {
+    public void updateID(int id, Vehicle updatedVehicle) {
+        if (updatedVehicle == null) {
+            throw new IllegalArgumentException("Нельзя обновить пустой vehicle.");
+        }
+        Set<Vehicle> vehicles = employeeCollection.getVehicles();
+        Vehicle foundVehicle = null;
+
+        // Поиск транспортного средства с заданным ID
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.getId() == id) {
+                foundVehicle = vehicle;
+                break;
+            }
+        }
+
+        if (foundVehicle == null) {
+            System.out.println("Vehicle c ID " + id + " не найден");
+            return; // Если транспортное средство с таким ID не найдено
+        }
+
+        // Обновление найденного транспортного средства
+        foundVehicle.update(updatedVehicle);
+        System.out.println("Vehicle c ID " + id + " был обновлен");
+    }
+
+    public void removeById(String argument) {
+        if (argument == null || argument.trim().isEmpty()) {
+            System.out.println("ID нет у пустого элемента.");
+            return;
+        }
         try {
-            long id = Long.parseLong(argument);
-            if (employeeCollection.existElementWithId(id)) {
-                employeeCollection.updateById(id, getVehicle());
-                System.out.println("Элемент успешно обновлён.");
+            int id = Integer.parseInt(argument.trim());
+            Set<Vehicle> vehicles = employeeCollection.getVehicles();
+
+            // Найдите элемент по ID
+            Vehicle toRemove = null;
+            for (Vehicle vehicle : vehicles) {
+                if (vehicle.getId() == id) {
+                    toRemove = vehicle;
+                    break;
+                }
+            }
+            // Удалите, если найден
+            if (toRemove != null) {
+                vehicles.remove(toRemove);
+                System.out.println("Vehicle c ID " + id + " удален");
             } else {
-                System.out.println("Элемента с таким id не существует.");
+                System.out.println("Vehicle с ID " + id + " не найден");
             }
         } catch (NumberFormatException e) {
-            System.out.println("Ошибка при вводе целого числа.");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void remove_by_id(String argument) {
-        try {
-            long id = Long.parseLong(argument);
-            if (employeeCollection.existElementWithId(id)) {
-                employeeCollection.removeById(id);
-                System.out.println("Элемент успешно удалён.");
-            } else {
-                System.out.println("Элемента с таким id не существует.");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Ошибка при вводе целого числа.");
+            System.out.println("Неправильный формат ID");
         }
     }
 
     public void clear() {
-        employeeCollection.clear();
-        System.out.println("Коллекция очищена");
+        if (employeeCollection.getVehicles() == null) {
+            System.out.println("Коллекция уже пуста.");
+            return;
+        }
+        employeeCollection.getVehicles().clear(); // Очистить коллекцию
+        System.out.println("Коллекция успешно очищена.");
     }
 
     public void save() {
-        try {
-            fileManager.writeToXML();
-            System.out.println("Коллекция успешно сохранена в файл с расширением XML.");
-        } catch (JAXBException e) {
-            System.out.println("Ошибка при сохранении коллекции " + e.getMessage());
-        }
-    }
+    } //пока не могу реализовать
 
-    public void executeScriptFileName(String fileName) {
-        //пупупупу
-    }
+    public void executeScriptFileName() {
+    } //пока не могу реализовать
 
-    public void EmergencyExit() {
-        System.out.println("Экстренное завершение программы.");
+    public void exit() {
+        System.out.println("Завершение программы...");
         System.exit(0);
     }
 
-    public void addIfMin(String vehicleName) throws IOException {
-        Vehicle vehicle = getVehicle(vehicleName);
-        employeeCollection.addIfMin(vehicle);
+    public void add_if_min(Vehicle newVehicle) {
+        if (newVehicle == null) {
+            throw new IllegalArgumentException("Нельзя добавить пустой vehicle в коллекцию");
+        }
+
+        Set<Vehicle> vehicles = employeeCollection.getVehicles();
+
+        if (vehicles == null || vehicles.isEmpty()) {
+            vehicles.add(newVehicle);
+            System.out.println("Vehicle добавленр: " + newVehicle.vehicleToString());
+            return;
+        }
+
+        // Найдите минимальный элемент по критерию
+        Vehicle minVehicle = Collections.min(vehicles, Comparator.comparing(Vehicle::getId));
+
+        if (newVehicle.getId() < minVehicle.getId()) {
+            vehicles.add(newVehicle); // Добавить, если новый элемент меньше
+            System.out.println("Vehicle added: " + newVehicle.vehicleToString());
+        } else {
+            System.out.println("New vehicle is not smaller than the minimum.");
+        }
     }
 
-    public void removeGreater(String vehicleName) throws IOException {
-        Vehicle vehicle = getVehicle(vehicleName);
-        employeeCollection.removeGreater(vehicle);
-    }
-
-    public void history() {
-    }
-
-    public void sumOfEnginePower() {
-        employeeCollection.sumOfEnginePower();
-    }
-
-    public void averageOfEnginePower() {
-        employeeCollection.averageOfEnginePower();
-    }
-
-    public void printUniqueFuelType() {
-        employeeCollection.printUniqueFuelType();
-    }
-
+    //inputCommandToJavaStyle позволяет динамически находить и вызывать методы по имени,
+    // даже если команда вводится в стиле, отличном от используемого в коде.
     private static String inputCommandToJavaStyle(String str) {
         StringBuilder result = new StringBuilder();
         boolean needUpperCase = false;
@@ -175,35 +194,48 @@ public class EmployeeComand {
         return result.toString();
     }
 
+    //при помощи связки inputCommandToJavaStyle и executeCommand происходит нахождение метода с названием команды
     public boolean executeCommand(String inputLine) {
         String[] line = inputLine.trim().split(" ", 2);
         String command = inputCommandToJavaStyle(line[0].toLowerCase());
-        if ("exit".equals(command)) {
-            return true;
+
+        if ("exit".equalsIgnoreCase(command)) { // Завершение программы
+            exit(); // Вызвать метод exit
+            return true; // Завершаем выполнение
         }
+
         try {
             Method methodToInvoke = null;
+
             for (Method method : methods) {
-                if (method.getName().equals(command)) {
+                if (method.getName().equalsIgnoreCase(command)) {
                     methodToInvoke = method;
                     break;
                 }
             }
+
             if (methodToInvoke == null) {
-                throw new NoSuchMethodException();
+                throw new NoSuchMethodException("Method not found: " + command);
             }
-            if (line.length == 1) {
-                methodToInvoke.invoke(this);
+
+            // Проверьте количество аргументов и вызовите метод соответственно
+            if (methodToInvoke.getParameterCount() == 0) {
+                methodToInvoke.invoke(this); // Если метод не принимает аргументы
             } else {
-                methodToInvoke.invoke(this, line[1]);
+                // Если метод принимает аргумент, но `line[1]` отсутствует, это вызовет ошибку
+                if (line.length > 1) {
+                    methodToInvoke.invoke(this, line[1]); // Передайте аргумент
+                } else {
+                    System.out.println("Не хватает аргументов для команды: " + command);
+                }
             }
-        } catch (NoSuchMethodException | IllegalArgumentException e) {
-            System.out.println("Такой команды не существует");
+        } catch (NoSuchMethodException e) {
+            System.out.println("Такой команды не существует: " + command);
         } catch (InvocationTargetException e) {
             if (e.getCause().getClass().equals(NoSuchElementException.class)) {
                 return true;
             }
-            System.out.println(e.getCause().getMessage());
+            System.out.println("Invocation error: " + e.getCause().getMessage());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
