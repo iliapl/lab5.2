@@ -144,12 +144,13 @@ public class FileRead {
             Vehicle vehicle = new Vehicle(name, coordinates, enginePower, type, fuelType);
             vehicle.setId((int) id);
             vehicle.setCreationDate(creationDate);
-            vehiclesCollecton.vehicles = new HashSet<>();
+            vehiclesCollecton.vehicles = new HashSet<>();//наш исходный хашс он здесь объявл впервые
             vehiclesCollecton.vehicles.add(vehicle);
             return vehiclesCollecton.vehicles;
         }
         else {
             System.out.println("Файл не может быть считан, пожалуйста создадите новуй объект");
+            vehiclesCollecton.vehicles = new HashSet<>();
             vehiclesCollecton.vehicles.add(readVehicleFromConsole());
             return vehiclesCollecton.vehicles;
         }
