@@ -74,7 +74,7 @@ public class EmployeeComand {
 
     public void show() {
         for (Vehicle vehicle : employeeCollection.getCollection()) {
-            System.out.println("Вывод всех элементов коллекции" + vehicle);
+            System.out.println("Вывод всех элементов коллекции: " + vehicle);
         }
     }
 
