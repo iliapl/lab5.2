@@ -48,6 +48,26 @@ try{
 
      */
 }
+/*
+        public void save() {
+            //try {
+
+            fileManager.writeFileToXML(fileManager.fileRead.vehiclesCollecton);
+            System.out.println("Коллекция успешно сохранена в файл с расширением XML.");
+            /*
+        } catch (JAXBException e) {
+            System.out.println("Ошибка при сохранении коллекции " + e.getMessage());
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        }
+
+ */
+
 
 
     }

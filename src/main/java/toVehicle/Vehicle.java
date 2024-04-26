@@ -94,4 +94,13 @@ public class Vehicle implements Serializable {
     public VehicleType getType() {
         return type;
     }
+    public String vehicleToString() {
+        return "Vehicle ID: " + id +
+                ", Name: " + name +
+                ", Coordinates: " + coordinates +
+                ", Creation Date: " + creationDate +
+                ", Engine Power: " + enginePower +
+                ", Type: " + type +
+                ", Fuel Type: " + fuelType;
+    }
 }

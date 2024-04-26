@@ -261,4 +261,16 @@ public class FileRead {
             return types[inputnomber];
         }
     }
+    public int readIDFromConsole(){
+        int id;
+        System.out.println("Введите значение ID");
+        id = scanner.nextInt();
+        if (id <= 0){
+            System.out.println("значение id должно быть больше 0, повторите попытку");
+            return readIDFromConsole();
+        } else {
+            return id;
+        }
+    }
+
 }
