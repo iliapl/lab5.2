@@ -1,15 +1,20 @@
 package util;
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import toVehicle.Vehicle;
-import toVehicle.VehiclesCollecton;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
+import java.util.NavigableSet;
+
+import static junit.framework.Assert.assertNotNull;
 
 public class WriteFileToXML {
     private PrintWriter printWriter;
@@ -17,11 +22,14 @@ public class WriteFileToXML {
     public WriteFileToXML(PrintWriter printWriter) {
         this.printWriter = printWriter;
     }
-
-    public void saveVehiclesToXML(VehiclesCollecton vehicles) throws JAXBException {
+/*
+    public void saveVehiclesToXML() throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(Vehicle.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(vehicles, printWriter);
+        marshaller.marshal( printWriter);
     }
+
+ */
 }
+

@@ -5,7 +5,9 @@ import lombok.Data;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -15,4 +17,5 @@ public class VehiclesCollecton {
     @XmlElement
     @XmlElementWrapper(name = "vehicle")
     public HashSet<Vehicle> vehicleList;
+
 }

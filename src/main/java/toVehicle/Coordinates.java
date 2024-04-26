@@ -2,18 +2,18 @@ package toVehicle;
 
 public class Coordinates {
     private long x;
-    private Float y;
+    private float y;
 
-    public Coordinates(long x, Float y) {
+    public Coordinates(long x, float y) {
         this.x = x;
-        if (y != null && y <= 597) {
+        if (y != 0 && y <= 597) {
             this.y = y;
         } else {
             throw new IllegalArgumentException("Недопустимое значение y");
         }
     }
 
-    public void setY(Float y) {
+    public void setY(float y) {
         this.y = y;
     }
 

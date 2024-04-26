@@ -16,8 +16,9 @@ public class EmployeeCollection {
             this.vehicles = vehicles;
             this.vehicles.addAll(vehicles);
             creationDate = java.time.ZonedDateTime.now();
-        } else {
-            this.vehicles = null;
+        }
+        else {
+            this.vehicles = new HashSet<>();
             creationDate = java.time.ZonedDateTime.now();
         }
     }

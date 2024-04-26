@@ -1,6 +1,7 @@
 package FileDo;
 
 import toVehicle.Vehicle;
+
 import util.FileRead;
 
 import javax.xml.bind.JAXBException;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.NavigableSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -19,7 +21,8 @@ public class EmployeeComand {
     private final Method[] methods;
     private boolean isScriptExecuting;
 
-    public EmployeeComand(FileManager fileManager, FileRead reader, EmployeeCollection employeeCollection) {
+
+    public EmployeeComand(FileManager fileManager, FileRead reader, EmployeeCollection employeeCollection) throws IOException {
         this.fileManager = fileManager;
         this.reader = reader;
         this.employeeCollection = employeeCollection;
@@ -41,7 +44,10 @@ public class EmployeeComand {
         }
         return null;
     }
+    public NavigableSet<Vehicle> getVehicles() throws IOException {
 
+        return employeeCollection.getCollection();
+    }
     public void help() {
         System.out.println("info: Выводит информацию о коллекции");
         System.out.println("show: Выводит все элементы коллекции");
@@ -113,21 +119,30 @@ public class EmployeeComand {
         employeeCollection.clear();
         System.out.println("Коллекция очищена");
     }
-
+/*
     public void save() {
         try {
-            fileManager.writeToXML();
+
+            fileManager.writeToXML(vehiclesCollecton);
             System.out.println("Коллекция успешно сохранена в файл с расширением XML.");
         } catch (JAXBException e) {
             System.out.println("Ошибка при сохранении коллекции " + e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
+
+ */
+
+
+
+
 
     public void executeScriptFileName(String fileName) {
         //пупупупу
     }
 
-    public void EmergencyExit() {
+    public void emergencyExit() {
         System.out.println("Экстренное завершение программы.");
         System.exit(0);
     }

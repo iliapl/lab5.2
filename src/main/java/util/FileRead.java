@@ -1,6 +1,8 @@
 package util;
 
 import FileDo.Filewas;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -8,6 +10,7 @@ import org.xml.sax.SAXException;
 import toVehicle.*;
 
 
+import javax.xml.bind.annotation.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedInputStream;
@@ -21,7 +24,7 @@ public class FileRead {
     private Filewas filewas;
     Scanner scanner;
     BufferedInputStream bufferedReaderin;
-    private File file;
+    public File file;
     HashSet<Vehicle> vehicles = new HashSet<>();
 
     public FileRead(BufferedInputStream bufferedReader, Scanner scanner, File file) {
@@ -30,7 +33,126 @@ public class FileRead {
         this.scanner = scanner;
         filewas = new Filewas();
     }
-
+    public boolean canReadElements() {
+        if (filewas.canReadFile(file)) {
+            if (getFirstNode() != null) {
+                return true;
+            } else {
+                System.out.println("Файл не содержит элементов");
+                return false;
+            }
+        } else {
+            System.out.println("Парсинг не может быть выполнен");
+            return false;
+        }
+    }
+    public HashSet<Vehicle> parserXML() {
+        if (canReadElements()) {
+            long id = 0;
+            String name = null;
+            Coordinates coordinates = null;
+            java.time.LocalDate creationDate = null;
+            int enginePower = 0;
+            VehicleType type = null;
+            FuelType fuelType = null;
+            NodeList nodeList = getNodes();
+            for (int i = 0; i < getNodes().getLength(); i++) {
+                if (getNodes().item(i).getNodeType() != Node.ELEMENT_NODE) {
+                    continue;
+                }
+                if (getNodes().item(i).equals("Vehicle")) {
+                    continue;
+                }
+                NodeList elements = nodeList.item(i).getChildNodes();
+                for (int co = 0; co < elements.getLength(); co++) {
+                    if (elements.item(co).getNodeType() == Node.ELEMENT_NODE) {
+                        switch (elements.item(co).getNodeName()) {
+                            case "id": {
+                                id = Long.parseLong(elements.item(co).getTextContent());
+                                break;
+                            }
+                            case "name": {
+                                name = elements.item(co).getTextContent();
+                                break;
+                            }
+                            case "creationDate": {
+                                creationDate = LocalDate.parse(elements.item(co).getTextContent());
+                                break;
+                            }
+                            case "enginePower": {
+                                enginePower = Integer.parseInt(elements.item(co).getTextContent());
+                                break;
+                            }
+                            case "type": {
+                                type = VehicleType.valueOf(elements.item(co).getTextContent());
+                                break;
+                            }
+                            case "fuelType": {
+                                fuelType = FuelType.valueOf(elements.item(co).getTextContent());
+                                break;
+                            }
+                            case "coordinates":{
+                                NodeList nodeCoordinates = elements.item(co).getChildNodes();
+                                long x = 0;
+                                float y = 0;
+                                for (int h = 0; h < nodeCoordinates.getLength(); h++) {
+                                    if (nodeCoordinates.item(h).getNodeType() == Node.ELEMENT_NODE) {
+                                        switch (nodeCoordinates.item(h).getNodeName()) {
+                                            case "x": {
+                                                x = Long.parseLong(nodeCoordinates.item(h).getTextContent());
+                                                break;
+                                            }
+                                            case "y": {
+                                                y = Float.parseFloat(nodeCoordinates.item(h).getTextContent());
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                coordinates = new Coordinates(x,y);
+                                break;
+                            }
+                        }
+                        /*
+                        if (elements.item(co).getNodeName().equals("coordinates")) {
+                            NodeList nodeCoordinates = elements.item(i).getChildNodes();
+                            System.out.println(elements.item(i).getChildNodes());
+                            long x = 0;
+                            Float y = null;
+                            for (int h = 0; h < nodeCoordinates.getLength(); h++) {
+                                if (nodeCoordinates.item(h).getNodeType() == Node.ELEMENT_NODE) {
+                                    switch (nodeCoordinates.item(h).getNodeName()) {
+                                        case "x": {
+                                            x = Long.parseLong(nodeCoordinates.item(h).getTextContent());
+                                            System.out.println(nodeCoordinates.item(h).getTextContent() + " " + "- name");
+                                            break;
+                                        }
+                                        case "y": {
+                                            y = Float.valueOf(nodeCoordinates.item(h).getTextContent());
+                                            System.out.println(nodeCoordinates.item(h).getTextContent() + " " + "- name");
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            coordinates = new Coordinates(x, y);
+                        }
+                        */
+                    }
+                }
+            }
+            Vehicle vehicle = new Vehicle(name, coordinates, enginePower, type, fuelType);
+            vehicle.setId((int) id);
+            vehicle.setCreationDate(creationDate);
+            vehicles.add(vehicle);
+            return vehicles;
+        }
+        else {
+            System.out.println("Файл не может быть считан, пожалуйста создадите новуй объект");
+            vehicles.add(readVehicleFromConsole());
+            return vehicles;
+        }
+    }
     public Document buildDocument() throws SAXException, IOException, ParserConfigurationException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         return docFactory.newDocumentBuilder().parse(file);
@@ -49,103 +171,6 @@ public class FileRead {
     public NodeList getNodes() {
         return getFirstNode().getChildNodes();
     }
-
-    public boolean canReadElements() {
-        if (filewas.canReadFile(file)) {
-            if (getFirstNode() != null) {
-                return true;
-            } else {
-                System.out.println("Файл не содержит элементов");
-                return false;
-            }
-        } else {
-            System.out.println("Парсинг не может быть выполнен");
-            return false;
-        }
-    }
-
-    public HashSet<Vehicle> parserXML() {
-        if (canReadElements()) {
-            NodeList nodeList = getNodes();
-            for (int i = 0; i < getNodes().getLength(); i++) {
-                if (getNodes().item(i).getNodeType() != Node.ELEMENT_NODE) {
-                    continue;
-                }
-                if (getNodes().item(i).equals("vehicle")) {
-                    continue;
-                }
-                NodeList elements = nodeList.item(i).getChildNodes();
-                for (int co = 0; co < elements.getLength(); co++) {
-
-                    if (elements.item(co).getNodeType() != Node.ELEMENT_NODE) {
-                        continue;
-                    }
-                    long id = 0;
-                    String name = null;
-                    Coordinates coordinates = null;
-                    java.time.LocalDate creationDate = null;
-                    int enginePower = 0;
-                    VehicleType type = null;
-                    FuelType fuelType = null;
-                    switch (elements.item(co).getNodeName()) {
-                        case "id": {
-                            id = Long.parseLong(elements.item(co).getTextContent());
-                            break;
-                        }
-                        case "name": {
-                            name = elements.item(co).getTextContent();
-                            break;
-                        }
-                        case "creationDate": {
-                            creationDate = LocalDate.parse(elements.item(co).getTextContent());
-                            break;
-                        }
-                        case "enginePower": {
-                            enginePower = Integer.parseInt(elements.item(co).getTextContent());
-                            break;
-                        }
-                        case "type": {
-                            type = VehicleType.valueOf(elements.item(co).getTextContent());
-                            break;
-                        }
-                        case "fuelType": {
-                            fuelType = FuelType.valueOf(elements.item(co).getTextContent());
-                            break;
-                        }
-                    }
-                    if (elements.item(co).equals("coordinates")) {
-                        NodeList nodeCoordinates = elements.item(i).getChildNodes();
-                        long x = 0;
-                        Float y = null;
-                        for (int h = 0; h < nodeCoordinates.getLength(); h++) {
-                            if (nodeCoordinates.item(h).getNodeType() != Node.ELEMENT_NODE) {
-                                continue;
-                            }
-                            switch (nodeCoordinates.item(h).getNodeName()) {
-                                case "x": {
-                                    x = Long.parseLong(nodeCoordinates.item(h).getTextContent());
-                                    break;
-                                }
-                                case "y": {
-                                    y = Float.valueOf(nodeCoordinates.item(h).getTextContent());
-                                    break;
-                                }
-                            }
-                            coordinates = new Coordinates(x, y);
-                        }
-                    }
-                    Vehicle vehicle = new Vehicle(name, coordinates, enginePower, type, fuelType);
-                    vehicle.setId((int) id);
-                    vehicle.setCreationDate(creationDate);
-                    vehicles.add(vehicle);
-                }
-            }
-        } else {
-            vehicles = null;
-        }
-        return vehicles;
-    }
-
     public boolean canRead() throws IOException {
         if (bufferedReaderin.available() != 0) {
             System.out.println("Файл может быть прочитан");
