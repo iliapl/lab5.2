@@ -1,15 +1,13 @@
 import FileDo.*;
-import org.w3c.dom.Document;
-import toVehicle.Vehicle;
 import util.EnvDoing;
 import util.FileRead;
 import util.WriteFileToXML;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class Client {
@@ -34,13 +32,10 @@ public class Client {
             // Setup for managing employee collections
             EmployeeCollection employeeCollection = new EmployeeCollection(fileManager.saveVehicles());
             EmployeeComand employeeComand = new EmployeeComand(fileManager, reader, employeeCollection);
-            Consoler console = new Consoler(employeeComand, scanner);
 
-            // Start console interaction
+            Consoler console = new Consoler(employeeComand, scanner);
             console.start();
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

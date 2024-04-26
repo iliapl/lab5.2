@@ -64,41 +64,35 @@ public class EmployeeComand {
         }
     }
 
-    public void add(Vehicle newVehicle) {
-        if (newVehicle == null) {
-            throw new IllegalArgumentException("Нельзя добавить пустой vehicle в коллекцию");
-        } // проверяем, newVehicle null или нет
-        Set<Vehicle> vehicles = employeeCollection.getVehicles();// пытаемся получить текущую коллекцию при помощи getVehicles()
-        if (vehicles == null) {
-            vehicles = new HashSet<>();
-        } // если такой нет, то инициализируется новая коллекция
-        vehicles.add(newVehicle);
-        System.out.println("Vehicle добавлен: " + newVehicle.vehicleToString());
+    public void add() {
+        Vehicle newVehicle = reader.readVehicleFromConsole();
+        employeeCollection.getVehicles().add(newVehicle);
+        System.out.println("Добавлен новый транспорт: " + newVehicle.getName());
     }
 
-    public void updateID(int id, Vehicle updatedVehicle) {
+    public void updateID() {
+        System.out.println("Обновление элемента коллекции по ID.");
+        int id = reader.readIDFromConsole();
+        // Находим элемент по `id`
+        Vehicle existingVehicle = employeeCollection.getVehicles().stream()
+                .filter(v -> v.getId() == id)
+                .findFirst()
+                .orElse(null);
+
+        if (existingVehicle == null) {
+            System.out.println("Элемент с ID " + id + " не найден в коллекции.");
+            return;
+        }
+
+        // Считываем новые данные для обновления
+        Vehicle updatedVehicle = reader.readVehicleFromConsole();
         if (updatedVehicle == null) {
-            throw new IllegalArgumentException("Нельзя обновить пустой vehicle.");
+            System.out.println("Ошибка при считывании новых данных для обновления.");
+            return;
         }
-        Set<Vehicle> vehicles = employeeCollection.getVehicles();
-        Vehicle foundVehicle = null;
-
-        // Поиск транспортного средства с заданным ID
-        for (Vehicle vehicle : vehicles) {
-            if (vehicle.getId() == id) {
-                foundVehicle = vehicle;
-                break;
-            }
-        }
-
-        if (foundVehicle == null) {
-            System.out.println("Vehicle c ID " + id + " не найден");
-            return; // Если транспортное средство с таким ID не найдено
-        }
-
-        // Обновление найденного транспортного средства
-        foundVehicle.update(updatedVehicle);
-        System.out.println("Vehicle c ID " + id + " был обновлен");
+        // Обновляем существующий элемент новыми данными
+        existingVehicle.update(updatedVehicle);
+        System.out.println("Элемент с ID " + id + " был успешно обновлен.");
     }
 
     public void removeById(String argument) {
@@ -196,17 +190,24 @@ public class EmployeeComand {
 
     //при помощи связки inputCommandToJavaStyle и executeCommand происходит нахождение метода с названием команды
     public boolean executeCommand(String inputLine) {
-        String[] line = inputLine.trim().split(" ", 2);
-        String command = inputCommandToJavaStyle(line[0].toLowerCase());
-
-        if ("exit".equalsIgnoreCase(command)) { // Завершение программы
-            exit(); // Вызвать метод exit
-            return true; // Завершаем выполнение
+        if (inputLine == null || inputLine.trim().isEmpty()) {
+            System.out.println("Введите команду"); // Выводится, если строка пустая
+            return false; // Возвращение для предотвращения дальнейших действий
         }
 
+        String[] line = inputLine.trim().split(" ", 2); // Разделение строки на команду и аргумент
+        String command = inputCommandToJavaStyle(line[0].toLowerCase()); // Преобразование к camelCase
+
         try {
+            // Если команда "exit", завершите выполнение программы
+            if ("exit".equalsIgnoreCase(command)) {
+                exit();
+                return true;
+            }
+
             Method methodToInvoke = null;
 
+            // Поиск метода, соответствующего названию команды
             for (Method method : methods) {
                 if (method.getName().equalsIgnoreCase(command)) {
                     methodToInvoke = method;
@@ -215,31 +216,29 @@ public class EmployeeComand {
             }
 
             if (methodToInvoke == null) {
-                throw new NoSuchMethodException("Method not found: " + command);
+                System.out.println("Такой команды не существует: " + command);
+                return false; // Завершить выполнение, если метод не найден
             }
 
-            // Проверьте количество аргументов и вызовите метод соответственно
+            // Если метод без аргументов, вызываем его
             if (methodToInvoke.getParameterCount() == 0) {
-                methodToInvoke.invoke(this); // Если метод не принимает аргументы
-            } else {
-                // Если метод принимает аргумент, но `line[1]` отсутствует, это вызовет ошибку
-                if (line.length > 1) {
-                    methodToInvoke.invoke(this, line[1]); // Передайте аргумент
-                } else {
+                methodToInvoke.invoke(this);
+            } else if (line.length > 1) { // Если метод принимает аргументы, но нет аргументов
+                String argument = line[1].trim(); // Убедитесь, что аргумент корректен
+                if (argument.isEmpty()) {
                     System.out.println("Не хватает аргументов для команды: " + command);
+                    return false;
                 }
+                methodToInvoke.invoke(this, argument); // Вызов метода с аргументом
+            } else {
+                System.out.println("Не хватает аргументов для команды: " + command); // Если аргумент отсутствует
             }
-        } catch (NoSuchMethodException e) {
-            System.out.println("Такой команды не существует: " + command);
+
         } catch (InvocationTargetException e) {
-            if (e.getCause().getClass().equals(NoSuchElementException.class)) {
-                return true;
-            }
-            System.out.println("Invocation error: " + e.getCause().getMessage());
+            System.out.println("Ошибка при вызове метода: " + e.getCause().getMessage());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         return false;
     }
 }
-

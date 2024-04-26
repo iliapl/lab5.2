@@ -1,24 +1,21 @@
 package FileDo;
 
-import toVehicle.FuelType;
 import toVehicle.Vehicle;
 
 import java.time.ZonedDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Set;
 
 public class EmployeeCollection {
     private final Set<Vehicle> vehicles;
     private final java.time.ZonedDateTime creationDate;
-
     public EmployeeCollection(Set<Vehicle> vehicles) {
-        if (vehicles != null) {
+        creationDate = java.time.ZonedDateTime.now();
+        if (vehicles == null) {
+            this.vehicles = new HashSet<>();
+        } else {
             this.vehicles = vehicles;
             this.vehicles.addAll(vehicles);
-            creationDate = java.time.ZonedDateTime.now();
-        } else {
-            this.vehicles = null;
-            creationDate = java.time.ZonedDateTime.now();
         }
     }
 

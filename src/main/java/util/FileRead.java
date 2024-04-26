@@ -196,18 +196,30 @@ public class FileRead {
         }
     }
 
+    public int readIDFromConsole(){
+        int id;
+        System.out.println("Введите значение ID");
+        id = scanner.nextInt();
+        if (id <= 0){
+            System.out.println("значение id должно быть больше 0, повторите попытку");
+            return readIDFromConsole();
+        } else {
+            return id;
+        }
+    }
+
     public VehicleType readVehicleTypeFromConsole() {
         System.out.println("Тип машины и её номер");
-        int nomber = 0;
+        int number = 0;
         VehicleType[] types = new VehicleType[VehicleType.values().length];
         for (VehicleType vehicleType : VehicleType.values()) {
-            types[nomber] = vehicleType;
-            System.out.println(nomber + " " + vehicleType);
-            nomber++;
+            types[number] = vehicleType;
+            System.out.println(number + " " + vehicleType);
+            number++;
         }
         System.out.println("напишите номер варианта");
         int inputnomber = scanner.nextInt();
-        if (inputnomber > nomber || inputnomber <= 0) {
+        if (inputnomber > number || inputnomber <= 0) {
             System.out.println("Вы ввели несуществующий номер, повторите попытку");
             System.out.println("Напоминаем");
             return readVehicleTypeFromConsole();

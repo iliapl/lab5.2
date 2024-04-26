@@ -5,8 +5,9 @@ import java.time.LocalDate;
 import java.util.Iterator;
 
 public class Vehicle implements Serializable {
-    private int id;
+
     private String name;
+    private int id;
     private Coordinates coordinates;
     private java.time.LocalDate creationDate;
     private Integer enginePower;
