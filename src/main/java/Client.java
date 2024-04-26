@@ -25,15 +25,16 @@ try{
     createFile.create();
 
      */
+    CreateFile createFile = new CreateFile();
     File file = new File(e.getPATHcollection());
-    FileInputStream fin = new FileInputStream(e.getPATHcollection());
+    FileInputStream fin = new FileInputStream(createFile.getPATHFile());
     BufferedInputStream bufferedReader = new BufferedInputStream(fin);
     FileRead reader = new FileRead(bufferedReader, scanner,file);
     //ща станет 0
     FileOutputStream fileOutputStream = new FileOutputStream(e.getPATHcollection(), true);
     PrintWriter printWriter = new PrintWriter(fileOutputStream);
-    WriteFileToXML writeFileToXML = new WriteFileToXML(printWriter);
-    FileManager fileManager =new FileManager(reader, writeFileToXML);
+    WriteFileToXML writeFileToXML = new WriteFileToXML(printWriter, reader.vehiclesCollecton);
+    FileManager fileManager =new FileManager(reader, writeFileToXML, createFile);
     EmployeeCollection employeeCollection = new EmployeeCollection(fileManager.saveVehicles());
     EmployeeComand employeeComand = new EmployeeComand(fileManager, reader, employeeCollection);
     Consoler console = new Consoler(employeeComand,scanner);

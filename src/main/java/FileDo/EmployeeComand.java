@@ -2,6 +2,7 @@ package FileDo;
 
 import toVehicle.Vehicle;
 
+import toVehicle.VehiclesCollecton;
 import util.FileRead;
 
 import javax.xml.bind.JAXBException;
@@ -119,20 +120,23 @@ public class EmployeeComand {
         employeeCollection.clear();
         System.out.println("Коллекция очищена");
     }
-/*
     public void save() {
-        try {
+        //try {
 
-            fileManager.writeToXML(vehiclesCollecton);
+            fileManager.writeFileToXML(fileManager.fileRead.vehiclesCollecton);
             System.out.println("Коллекция успешно сохранена в файл с расширением XML.");
+            /*
         } catch (JAXBException e) {
             System.out.println("Ошибка при сохранении коллекции " + e.getMessage());
+
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+             */
     }
 
- */
 
 
 

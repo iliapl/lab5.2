@@ -82,4 +82,16 @@ public class Vehicle implements Serializable {
     public FuelType getFuelType() {
         return fuelType;
     }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public VehicleType getType() {
+        return type;
+    }
 }

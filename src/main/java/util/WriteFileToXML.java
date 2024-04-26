@@ -1,14 +1,23 @@
 package util;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import org.apache.maven.model.Organization;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import toVehicle.Vehicle;
+import toVehicle.VehiclesCollecton;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.*;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
@@ -17,19 +26,67 @@ import java.util.NavigableSet;
 import static junit.framework.Assert.assertNotNull;
 
 public class WriteFileToXML {
+    EnvDoing envDoing = new EnvDoing();
+    VehiclesCollecton collecton;
     private PrintWriter printWriter;
 
-    public WriteFileToXML(PrintWriter printWriter) {
+    public WriteFileToXML(PrintWriter printWriter, VehiclesCollecton collecton) {
         this.printWriter = printWriter;
+        this.collecton = collecton;
     }
-/*
-    public void saveVehiclesToXML() throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Vehicle.class);
-        Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal( printWriter);
+    public int toSaveToXML() throws ParserConfigurationException {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        Document doc = docBuilder.newDocument();
+        Element orgElement = doc.createElement("Vehicles");
+        for (Vehicle vehicle : collecton.vehicles) {
+            orgElement.appendChild(WriteFileToXML.toXmlElement(vehicle, doc));
+        }
+        doc.appendChild(orgElement);
+        try {
+            if (saveDocumentToFile(doc) < 0) {
+                return -1;
+            }
+        } catch (TransformerException e) {
+            System.out.println("Ошибка трансформера" + '\n' + e.getLocalizedMessage());
+        }
+        return 1;
+    }
+    private int saveDocumentToFile(Document doc) throws TransformerException {
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(doc);
+        File file = new File(envDoing.getPATHcollection());
+        if (!file.exists()) {
+            return -1;
+        }
+        StreamResult result = new StreamResult(file);
+            result.setWriter(printWriter);
+
+        transformer.transform(source, result);
+        return 1;
     }
 
- */
-}
+        private static Element toXmlElement(Vehicle vehicle, Document doc) {
+            Element VehicleElement = doc.createElement("vehicle");
+            VehicleElement.appendChild(doc.createElement("id"));
+            VehicleElement.getChildNodes().item(0).setTextContent(String.valueOf(vehicle.getId()));
+            VehicleElement.appendChild(doc.createElement("name"));
+            VehicleElement.getChildNodes().item(1).setTextContent(String.valueOf(vehicle.getName()));
+            VehicleElement.appendChild(doc.createElement("coordinates"));
+            VehicleElement.getChildNodes().item(2).appendChild(doc.createElement("x"));
+            VehicleElement.getChildNodes().item(2).getChildNodes().item(0).setTextContent(String.valueOf(vehicle.getCoordinates().getX()));
+            VehicleElement.getChildNodes().item(2).appendChild(doc.createElement("y"));
+            VehicleElement.getChildNodes().item(2).getChildNodes().item(1).setTextContent(String.valueOf(vehicle.getCoordinates().getY()));
+            VehicleElement.appendChild(doc.createElement("time"));
+            VehicleElement.getChildNodes().item(3).setTextContent(String.valueOf(vehicle.getCreationDate()));
+            VehicleElement.appendChild(doc.createElement("enginePower"));
+            VehicleElement.getChildNodes().item(4).setTextContent(String.valueOf(vehicle.getEnginePower()));
+            VehicleElement.appendChild(doc.createElement("type"));
+            VehicleElement.getChildNodes().item(5).setTextContent(String.valueOf(vehicle.getType()));
+            VehicleElement.appendChild(doc.createElement("fuelType"));
+            VehicleElement.getChildNodes().item(6).setTextContent(vehicle.getFuelType().name());
+            return VehicleElement;
+        }
+    }
 

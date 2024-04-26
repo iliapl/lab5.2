@@ -25,7 +25,7 @@ public class FileRead {
     Scanner scanner;
     BufferedInputStream bufferedReaderin;
     public File file;
-    HashSet<Vehicle> vehicles = new HashSet<>();
+    public VehiclesCollecton vehiclesCollecton = new VehiclesCollecton();
 
     public FileRead(BufferedInputStream bufferedReader, Scanner scanner, File file) {
         this.bufferedReaderin = bufferedReader;
@@ -144,13 +144,14 @@ public class FileRead {
             Vehicle vehicle = new Vehicle(name, coordinates, enginePower, type, fuelType);
             vehicle.setId((int) id);
             vehicle.setCreationDate(creationDate);
-            vehicles.add(vehicle);
-            return vehicles;
+            vehiclesCollecton.vehicles = new HashSet<>();
+            vehiclesCollecton.vehicles.add(vehicle);
+            return vehiclesCollecton.vehicles;
         }
         else {
             System.out.println("Файл не может быть считан, пожалуйста создадите новуй объект");
-            vehicles.add(readVehicleFromConsole());
-            return vehicles;
+            vehiclesCollecton.vehicles.add(readVehicleFromConsole());
+            return vehiclesCollecton.vehicles;
         }
     }
     public Document buildDocument() throws SAXException, IOException, ParserConfigurationException {

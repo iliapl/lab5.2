@@ -63,4 +63,7 @@ public class CreateFile {
     public String getPATHoperationFile() {
         return "C:\\Users\\plysc\\IdeaProjects\\file\\operationFile.xml";
     }
+    public String getPATHFile() {
+        return "C:\\Users\\plysc\\IdeaProjects\\file\\collection.xml";
+    }
 }
