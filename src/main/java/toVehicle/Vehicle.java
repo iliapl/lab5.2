@@ -5,8 +5,9 @@ import java.time.LocalDate;
 import java.util.Iterator;
 
 public class Vehicle implements Serializable {
-    private int id;
+
     private String name;
+    private int id;
     private Coordinates coordinates;
     private java.time.LocalDate creationDate;
     private Integer enginePower;
@@ -93,5 +94,19 @@ public class Vehicle implements Serializable {
 
     public VehicleType getType() {
         return type;
+    }
+
+    public static int getNextid() {
+        return nextid;
+    }
+
+    public String vehicleToString() {
+        return "Vehicle ID: " + id +
+                ", Name: " + name +
+                ", Coordinates: " + coordinates +
+                ", Creation Date: " + creationDate +
+                ", Engine Power: " + enginePower +
+                ", Type: " + type +
+                ", Fuel Type: " + fuelType;
     }
 }
