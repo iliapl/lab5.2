@@ -1,5 +1,5 @@
 package FileDo;
-
+//мы должны работать именно с vehicleCollection из fileManager.fileRead.vehiclesCollecton
 import toVehicle.Vehicle;
 import util.FileRead;
 
@@ -27,6 +27,7 @@ public class EmployeeComand {
         this.isScriptExecuting = false;
         scriptNames = new HashSet<>();
     }
+    //мы должны работать именно с vehicleCollection из fileManager.fileRead.vehiclesCollecton
 
     public void help() {
         System.out.println("info: Выводит информацию о коллекции");
@@ -134,7 +135,8 @@ public class EmployeeComand {
     }
 
     public void save(){
-        fileManager.writeFileToXML(reader.vehiclesCollecton);
+        fileManager.writeFileToXML(fileManager.fileRead.vehiclesCollecton);
+        //мы должны работать именно с vehicleCollection из fileManager.fileRead.vehiclesCollecton
     }
 
     public void executeScriptFileName() {
