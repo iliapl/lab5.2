@@ -36,4 +36,9 @@ public class CreateFile {
     public String getPATHoperationFile() {
         return operationFile.getAbsolutePath();
     }
+
+
+    public String getPATHFile() {
+        return "C:\\Users\\plysc\\IdeaProjects\\file\\collection.xml";
+    }
 }

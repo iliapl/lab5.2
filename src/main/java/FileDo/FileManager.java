@@ -18,7 +18,7 @@ public class FileManager {
     EnvDoing envDoing = new EnvDoing();
     FileRead fileRead;
     WriteFileToXML writeFileToXML;
-CreateFile createFile;
+    CreateFile createFile;
     public FileManager(FileRead fileRead, WriteFileToXML writeFileToXML, CreateFile createFile) {
         this.fileRead = fileRead;
         this.writeFileToXML = writeFileToXML;
@@ -26,7 +26,7 @@ CreateFile createFile;
     }
 
     public HashSet<Vehicle> saveVehicles() throws IOException {
-            return fileRead.parserXML();
+        return fileRead.parserXML();
     }
     public void writeFileToXML(VehiclesCollecton vehiclesCollecton){
         try {

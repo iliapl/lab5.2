@@ -133,8 +133,9 @@ public class EmployeeComand {
         System.out.println("Коллекция успешно очищена.");
     }
 
-    public void save() {
-    } //пока не могу реализовать
+    public void save(){
+        fileManager.writeFileToXML(reader.vehiclesCollecton);
+    }
 
     public void executeScriptFileName() {
     } //пока не могу реализовать
